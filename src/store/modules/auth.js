@@ -9,9 +9,7 @@ const getters = {
     getLoginToken(state) {
         return state.loginToken;
     },
-    getLoginStatus(state) {
-        return state.isLogin;
-    }
+    getLoginStatus: state => state.isLogin
 };
 
 const actions = {
