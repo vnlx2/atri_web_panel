@@ -5,5 +5,5 @@ import { mapGetters } from 'vuex';
 </script>
 
 <template>
-  <router-view :class="(!isAuthentic)?'bg-login bg-center bg-cover' : ''"></router-view>
+  <router-view :class="(!this.$cookies.get('token'))?'bg-login bg-center bg-cover' : ''"></router-view>
 </template>

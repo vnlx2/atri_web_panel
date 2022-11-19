@@ -3,10 +3,8 @@ import DashboardVue from "../views/admin/Dashboard.vue";
 import AdminVue from "../views/Admin.vue";
 import VisualNovelVue from "../views/admin/VisualNovel.vue";
 import { createRouter, createWebHistory } from "vue-router";
-import store from "../store";
-
-// let isAuthentic = store.state.auth.isLogin;
-// const isAuthentic = false;
+import { useCookies } from "vue3-cookies";
+const { cookies } = useCookies();
 
 const routes = [
     {
@@ -15,7 +13,7 @@ const routes = [
         component: LoginVue,
         meta: {
             title: 'Login',
-            requiredNotAuth: true
+            requiredAuth: false
         }
     },
     {
@@ -47,20 +45,24 @@ const router = createRouter({
 
 router.beforeEach((toRoute, fromRoute, next) => {
     window.document.title = `ATRI Control Panel - ${toRoute.meta && toRoute.meta.title ? toRoute.meta.title : 'Login'}`;    
-    if(toRoute.matched.some(record => record.meta.requiredAuth)) {
-        if(!store.getters['auth/getLoginStatus']) {
+    if(toRoute.meta.requiredAuth) {
+        if(!cookies.get('token')) {
             next({ name: 'login' });
         }
-        next();
-    } 
-    else if(toRoute.matched.some(record => record.meta.requiredNotAuth)) {
-        if(store.getters['auth/getLoginStatus']) {
+        else if(toRoute.name == 'home') {
             next({ name: 'dashboard' });
         }
-        next();
-    }
+        else {
+            next();
+        }
+    } 
     else {
-        next();
+        if(cookies.get('token')) {
+            next({ name: 'home' });
+        }
+        else {
+            next();
+        }
     }
 }); 
 

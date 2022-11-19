@@ -32,7 +32,7 @@
 </template>
 
 <script>
-    import { mapActions, mapGetters } from 'vuex';
+    import axios from 'axios';
 
     export default {
         data() {
@@ -48,26 +48,25 @@
                 }
             };
         },
-        computed: {
-            ...mapGetters("auth", {
-                getLoginToken: "getLoginToken"
-            }),
-        },
         methods: {
-            ...mapActions("auth", {
-                actionLoginApi: "loginApi"
-            }),
-
             async onSubmit() { 
                 try {
                     this.cleanError();
-                    await this.actionLoginApi(this.form);
-                    if(this.getLoginToken !== '') {
-                        this.$router.push('/dashboard');
+                    const response = await axios.post(
+                                `${import.meta.env.VITE_API_ADDRESS}/api/v1/auth/login`,
+                                this.form, 
+                                {
+                                    headers: {
+                                                'Content-Type': 'application/json',
+                                            }
+                                }
+                            );
+                    if(response && response.status == 200) {
+                        this.$cookies.set('token', response.data.token, "1d");
+                        this.$router.push({ name: 'dashboard' })
                     }
-
                 } catch(err) {
-                    console.log(err);
+                    console.error(err);
                     this.error.isError = true;
                     this.error.errorMessage = err.response.data.message;
                 }
