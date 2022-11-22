@@ -7,7 +7,7 @@
                     <h1 class="text-4xl font-medium mb-2">Welcome</h1>
                     <p class="text-gray-500">Please enter your detail!</p>
                 </div>
-                <div class="w-50 lg:w-96">
+                <div class="w-52 lg:w-96">
                     <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert" v-if="error.isError">
                         <p class="font-medium">Error!</p>
                         <p>{{ error.errorMessage }}</p> 
