@@ -17,12 +17,13 @@
     export default {
         data() {
             return {
-                isSidebarOpen: false
+                isSidebarOpen: false,
             }
         },
         provide() {
             return {
-                isSidebarOpen: computed(() => this.isSidebarOpen)
+                isSidebarOpen: computed(() => this.isSidebarOpen),
+                tokenData:  this.$cookies.get('token'),
             }
         },        
         methods: {

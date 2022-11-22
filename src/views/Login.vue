@@ -57,13 +57,13 @@
                                 this.form, 
                                 {
                                     headers: {
-                                                'Content-Type': 'application/json',
-                                            }
+                                        'Content-Type': 'application/json',
+                                    }
                                 }
                             );
                     if(response && response.status == 200) {
-                        this.$cookies.set('token', response.data.token, "1d");
-                        this.$router.push({ name: 'dashboard' })
+                        this.$cookies.set('token', response.data.data.token, "1d");
+                        this.$router.push({ name: 'dashboard' });
                     }
                 } catch(err) {
                     console.error(err);
