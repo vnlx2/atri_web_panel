@@ -4,6 +4,7 @@ import App from './App.vue';
 import router from './routes';
 import store from './store/index';
 import VueCookies from 'vue3-cookies';
+import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
 // Vuetify
 import 'vuetify/styles';
