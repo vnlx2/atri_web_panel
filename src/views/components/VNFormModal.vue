@@ -155,7 +155,7 @@ export default {
   },
   mounted() {
     this.code = this.vnDetails.code;
-    this.vnDataUrls = this.vnDetails.vnDataUrls;
+    this.vnDataUrls = (this.vnDetails.vnDataUrls) ? this.vnDetails.vnDataUrls : {};
   },
   data() {
     return {

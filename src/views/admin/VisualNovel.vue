@@ -101,6 +101,7 @@ import VNFormModalVue from "../components/VNFormModal.vue";
     >
       {{ snackbarStatus.message }}
     </v-snackbar>
+    <!-- Confirmation Dialog Container -->
   </div>
 </template>
 
@@ -113,6 +114,7 @@ export default {
     return {
       vnLists: [],
       showForm: false,
+      dialogState: false,
       snackbarStatus: {
         state: false,
         message: ''
@@ -229,7 +231,34 @@ export default {
       }
     },  
     async destroy(code) {
-      console.log(`Delete ${code}`);
+      const confirm = await this.$swal.fire({
+        titleText: 'Are you sure?',
+        text: 'Lorem Ipsum Dolor Sit Amet',
+        icon: 'warning',
+        showConfirmButton: true,
+        showCancelButton: true,
+        reverseButtons: true,
+        confirmButtonText: 'Delete'
+      });
+      if(confirm.isConfirmed) {
+        try {
+          const response = await axios.delete(
+            `${import.meta.env.VITE_API_ADDRESS}/api/v1/visualnovel/delete?code=${code}`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${this.$cookies.get("token")}`,
+              },
+            }
+          );
+          if(response && response.status == 200) {       
+            this.showSnackbarStatus(response.data);
+            this.showList();
+          }
+        } catch (err) {
+          this.showSnackbarStatus(err);
+        }
+      }
     },
     showSnackbarStatus(response) {
       if('code' in response) {
