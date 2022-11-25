@@ -158,6 +158,46 @@ export default {
         },
       });
     }, 
+    async edit(code) {
+      const self = this;
+      const vnDetail = await this.detail(code);
+      $vfm.show({
+        component: VNFormModalVue,
+        bind: {
+          isEditForm: true,
+          vnDetails: vnDetail.data.data
+        },
+        on: {
+          async update(code, vnDataUrls, close) {
+            try {
+              const response = await self.update({ code: code, vnDataUrls: vnDataUrls });
+              if(response && response.status == 200) {       
+                self.showSnackbarStatus(response.data);
+                self.showList();
+                close();
+              }
+            } catch (err) {
+              self.showSnackbarStatus(err);
+            }
+          }
+        }
+      });
+    },
+    async detail(code) {
+      try {
+        return await axios.get(
+          `${import.meta.env.VITE_API_ADDRESS}/api/v1/visualnovel/detail?code=${code}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${this.$cookies.get("token")}`,
+            },
+          }
+        )
+      } catch (err) {
+        throw err.response.data;
+      }
+    },
     async store(body) {
       try {
         return await axios.post(
@@ -172,10 +212,22 @@ export default {
       } catch (err) {
         throw err.response.data;
       }
-    },
-    async edit(code) {
-      console.log(code);
-    },
+    },  
+    async update(body) {
+      try {
+        return await axios.put(
+          `${import.meta.env.VITE_API_ADDRESS}/api/v1/visualnovel/update`,
+          body, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${this.$cookies.get("token")}`,
+            },
+          }
+        );
+      } catch (err) {
+        throw err.response.data;
+      }
+    },  
     async destroy(code) {
       console.log(`Delete ${code}`);
     },
