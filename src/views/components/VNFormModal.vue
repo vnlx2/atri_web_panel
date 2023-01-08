@@ -155,6 +155,7 @@ export default {
   },
   mounted() {
     this.code = this.vnDetails.code;
+    this.title = this.vnDetails.title;
     this.vnDataUrls = (this.vnDetails.vnDataUrls) ? this.vnDetails.vnDataUrls : {};
   },
   data() {

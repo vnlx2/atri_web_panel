@@ -1,7 +1,7 @@
 <template>
     <section class="flex flex-row h-screen">
         <div class="hidden lg:basis-1/2 lg:block"></div>
-        <div class="basis-full lg:basis-1/2 flex flex-col bg-white bg-opacity-70 backdrop-blur-xl drop-shadow-lg items-center justify-center">
+        <div class="basis-full bg-white lg:basis-1/2 flex flex-col bg-opacity-70 backdrop-blur-xl drop-shadow-lg items-center justify-center">
             <div>
                 <div class="font-sans antialiased mb-8 text-center lg:text-left">
                     <h1 class="text-4xl font-medium mb-2">Welcome</h1>
@@ -14,12 +14,8 @@
                     </div>
                     <form method="post" @submit.prevent="onSubmit">
                         <div class="mb-6">
-                            <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-                            <input type="text" name="username" v-model="form.username" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Enter your username" required>
-                        </div>
-                        <div class="mb-6">
-                            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                            <input type="password" name="password" v-model="form.password" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Enter your password" required>
+                            <v-text-field label="Username" variant="solo" v-model="form.username" class="rounded-xl" required></v-text-field>
+                            <v-text-field label="Password" variant="solo" v-model="form.password" class="rounded-xl" type="password" required></v-text-field>
                         </div>
                         <div class="mb-6">
                             <button class="text-white bg-sky-600 hover:bg-sky-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-md w-full px-5 py-2.5 text-center">Login</button>
