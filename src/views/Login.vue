@@ -59,7 +59,7 @@
                             );
                     if(response && response.status == 200) {
                         this.$cookies.set('token', response.data.data.token, "1d");
-                        this.$router.push({ name: 'dashboard' });
+                        this.$router.push({ name: 'Dashboard' });
                     }
                 } catch(err) {
                     console.error(err);

@@ -35,7 +35,7 @@ const routes = [
         meta: {
             requiredAuth: true
         }
-    },
+    }
 ];
 
 const router = createRouter({    
@@ -44,7 +44,6 @@ const router = createRouter({
 });
 
 router.beforeEach((toRoute, fromRoute, next) => {
-    console.log(toRoute);
     window.document.title = `ATRI Control Panel - ${toRoute.name}`;    
     if(toRoute.meta.requiredAuth) {
         if(!cookies.get('token')) {

@@ -1,9 +1,16 @@
 <script setup>
 import { useRoute } from 'vue-router';
 import { computed } from '@vue/reactivity';
+import { useCookies } from "vue3-cookies";
+const { cookies } = useCookies();
 
 const route = useRoute();
 const currentRouteName = computed(() => route.name);
+
+function logout() {
+    cookies.remove('token');
+    route.push({ name: 'login' });
+}
 </script>
 
 <style>
@@ -68,7 +75,7 @@ const currentRouteName = computed(() => route.name);
                 <ul class="bottom-0 py-3 mt-auto content-end">
                     <li>
                         <a href="#"
-                            class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-blue-500 pr-6">
+                            class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-blue-500 pr-6" @click="logout">
                             <span class="inline-flex justify-center items-center ml-4">
                                 <i class="ri-logout-circle-line"></i>
                             </span>
