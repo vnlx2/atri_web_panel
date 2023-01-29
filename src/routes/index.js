@@ -23,19 +23,19 @@ const routes = [
         children: [
             {
                 path: '/dashboard',
-                name: 'dashboard',
+                name: 'Dashboard',
                 component: DashboardVue
             },
             {
                 path: '/visualnovel',
-                name: 'vn',
+                name: 'Visual Novel',
                 component: VisualNovelVue
             }
         ],
         meta: {
             requiredAuth: true
         }
-    }
+    },
 ];
 
 const router = createRouter({    
@@ -44,13 +44,14 @@ const router = createRouter({
 });
 
 router.beforeEach((toRoute, fromRoute, next) => {
-    window.document.title = `ATRI Control Panel - ${toRoute.meta && toRoute.meta.title ? toRoute.meta.title : 'Login'}`;    
+    console.log(toRoute);
+    window.document.title = `ATRI Control Panel - ${toRoute.name}`;    
     if(toRoute.meta.requiredAuth) {
         if(!cookies.get('token')) {
             next({ name: 'login' });
         }
         else if(toRoute.name == 'home') {
-            next({ name: 'dashboard' });
+            next({ name: 'Dashboard' });
         }
         else {
             next();
