@@ -39,7 +39,7 @@ function logout() {
             <div class="flex justify-center items-center h-14 text-lg">
                 <p>ATRI Control Panel</p>
             </div>
-            <div class="overflow-y-auto overflox-x-hidden flex flex-col">
+            <div class="overflow-y-auto overflox-x-hidden relative h-full">
                 <ul class="py-4 space-y-1">
                     <li>
                         <a href="/"
@@ -49,6 +49,8 @@ function logout() {
                             </span>
                             <span class="ml-2 text-sm tracking-wide truncate">Dashboard</span>
                         </a>
+                    </li>
+                    <li>
                         <a href="/visualnovel"
                             class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-blue-500 pr-6" :class="{ 'border-blue-500': currentRouteName === 'Visual Novel' }">
                             <span class="inline-flex justify-center items-center ml-4">
@@ -56,6 +58,8 @@ function logout() {
                             </span>
                             <span class="ml-2 text-sm tracking-wide truncate">Visual Novel</span>
                         </a>
+                    </li>
+                    <li>
                         <a href="/visualnovel"
                             class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-blue-500 pr-6" :class="{ 'border-blue-500': currentRouteName === 'FanTL' }">
                             <span class="inline-flex justify-center items-center ml-4">
@@ -63,6 +67,8 @@ function logout() {
                             </span>
                             <span class="ml-2 text-sm tracking-wide truncate">Fan TL Team</span>
                         </a>
+                    </li>
+                    <li>
                         <a href="#"
                             class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-blue-500 pr-6" :class="{ 'border-blue-500': currentRouteName === 'Setting' }">
                             <span class="inline-flex justify-center items-center ml-4">
@@ -71,9 +77,7 @@ function logout() {
                             <span class="ml-2 text-sm tracking-wide truncate">Setting and Others</span>
                         </a>
                     </li>
-                </ul>
-                <ul class="bottom-0 py-3 mt-auto content-end">
-                    <li>
+                    <li class="absolute bottom-0 w-full pb-3">
                         <a href="#"
                             class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-blue-500 pr-6" @click="logout">
                             <span class="inline-flex justify-center items-center ml-4">
