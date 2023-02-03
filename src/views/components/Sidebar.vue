@@ -60,8 +60,8 @@ function logout() {
                         </a>
                     </li>
                     <li>
-                        <a href="/visualnovel"
-                            class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-blue-500 pr-6" :class="{ 'border-blue-500': currentRouteName === 'FanTL' }">
+                        <a href="/fantl"
+                            class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-blue-500 pr-6" :class="{ 'border-blue-500': currentRouteName === 'Fan Translator' }">
                             <span class="inline-flex justify-center items-center ml-4">
                                 <i class="ri-team-line"></i>
                             </span>

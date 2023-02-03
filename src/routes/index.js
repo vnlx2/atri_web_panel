@@ -2,6 +2,7 @@ import LoginVue from "../views/Login.vue";
 import DashboardVue from "../views/admin/Dashboard.vue";
 import AdminVue from "../views/Admin.vue";
 import VisualNovelVue from "../views/admin/VisualNovel.vue";
+import FanTranslatorVue from "../views/admin/FanTranslator.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import { useCookies } from "vue3-cookies";
 const { cookies } = useCookies();
@@ -30,6 +31,11 @@ const routes = [
                 path: '/visualnovel',
                 name: 'Visual Novel',
                 component: VisualNovelVue
+            },
+            {
+                path: '/fantl',
+                name: 'Fan Translator',
+                component: FanTranslatorVue
             }
         ],
         meta: {
