@@ -9,7 +9,6 @@ const currentRouteName = computed(() => route.name);
 
 function logout() {
     cookies.remove('token');
-    route.push({ name: 'login' });
 }
 </script>
 
