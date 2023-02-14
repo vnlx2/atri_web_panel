@@ -3,6 +3,7 @@ import DashboardVue from "../views/admin/Dashboard.vue";
 import AdminVue from "../views/Admin.vue";
 import VisualNovelVue from "../views/admin/VisualNovel.vue";
 import FanTranslatorVue from "../views/admin/FanTranslator.vue";
+import UserManagementVue from "../views/admin/UserManagement.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import { useCookies } from "vue3-cookies";
 const { cookies } = useCookies();
@@ -36,6 +37,11 @@ const routes = [
                 path: '/fantl',
                 name: 'Fan Translator',
                 component: FanTranslatorVue
+            },
+            {
+                path: '/user',
+                name: 'User Management',
+                component: UserManagementVue
             }
         ],
         meta: {
