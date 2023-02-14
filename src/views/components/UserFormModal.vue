@@ -54,7 +54,7 @@ const confirmPasswordValidation = [
 <template>
 	<vue-final-modal v-slot="{ close }" v-bind="$attrs" classes="flex justify-center items-center m-5"
 		content-class="relative flex flex-col 2xl:w-1/2 max-h-full mx-4 p-4 border-transparent rounded-lg dark:border-gray-800 rounded bg-white dark:bg-gray-900">
-		<span class="mr-8 text-2xl font-bold">{{ !this.isEditForm ? "Add" : "Edit" }} User</span>
+		<span class="mr-8 text-2xl font-bold">{{ !isEditForm ? "Add" : "Edit" }} User</span>
 		<div class="overflow-y-auto my-5">
 			<v-form ref="form" v-model="isGeneralInfoValid" class="px-2" lazy-validation>
 				<!-- User Information -->
@@ -71,13 +71,13 @@ const confirmPasswordValidation = [
 		</div>
 		<div class="flex-shrink-0 flex justify-center items-center pt-4 space-x-4">
 			<button @click="
-				!this.isEditForm
+				!isEditForm
 					? $emit('store', username, password, close)
 					: $emit('update', username, password, close)
 			" type="button"
 				class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-md px-5 py-2.5 mr-2 mb-2 disabled:opacity-50 disabled:pointer-events-none"
 				:disabled="!isGeneralInfoValid">
-				{{ !this.isEditForm ? "Save" : "Update" }}
+				{{ !isEditForm ? "Save" : "Update" }}
 			</button>
 			<button @click="close" type="button"
 				class="focus:outline-none text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-md px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
