@@ -42,7 +42,7 @@ async function edit(code) {
 async function destroy(code) {
 	const confirm = await swal.fire({
 		titleText: 'Are you sure?',
-		text: 'Lorem Ipsum Dolor Sit Amet',
+		text: "Are you sure want to delete this Visual Novel's download link?",
 		icon: 'warning',
 		showConfirmButton: true,
 		showCancelButton: true,
