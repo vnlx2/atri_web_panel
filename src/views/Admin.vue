@@ -5,12 +5,14 @@ import SidebarVue from './components/Sidebar.vue';
 </script>
 
 <template>
-    <div class="flex">
+    <div class="flex overflow-hidden">
         <SidebarVue></SidebarVue>
-        <div class="w-full h-screen relative p-6 bg-gray-50">
-            <router-view></router-view>
+        <div class="w-full relative">
+            <div class="h-screen overflow-auto relative p-6 bg-gray-50">
+                <router-view></router-view>
+            </div>        
             <Footer></Footer>
-        </div>        
+        </div>
     </div>
 </template>
 
