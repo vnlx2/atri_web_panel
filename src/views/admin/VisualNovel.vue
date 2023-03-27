@@ -12,18 +12,31 @@ const pagination = ref({
 	page: 1,
 	total: 5,
 });
+const searchQuery = ref("");
 const showForm = ref(false);
 const snackbarStatus = ref({
 	state: false,
 	message: ''
 });
 
+// Watch pagination page number
 watch(
 	() => pagination.value.page,
 	(newPageNumber) => {
 		pagination.value.page = newPageNumber;
 		tableKey.value++;
-	});
+	}
+);
+
+// Watch search query fields
+watch(
+	() => searchQuery.value,
+	(newSearchQuery) => {
+		pagination.value.page = 1;
+		searchQuery.value = newSearchQuery;
+		tableKey.value++;
+	}
+);
 
 function updatePaginationTotal(total) {
 	pagination.value.total = total;
@@ -80,6 +93,10 @@ function showSnackbarStatus(response) {
 			Add Record
 		</button>
 		<div class="pt-6">
+			<v-text-field class="max-w-md grid-cols-none" density="compact" variant="solo" label="Search..."
+				append-inner-icon="mdi-magnify" single-line hide-details v-model="searchQuery" @click:append-inner=""></v-text-field>
+		</div>
+		<div class="pt-6">
 			<v-table theme="light">
 				<thead>
 					<tr>
@@ -90,10 +107,9 @@ function showSnackbarStatus(response) {
 				</thead>
 				<tbody>
 					<suspense>
-						<VisualNovelTable v-bind:showForm="showForm" v-bind:pagination="pagination"
-							v-on:showSnackbarStatus="showSnackbarStatus"
-							v-on:updatePaginationTotal="updatePaginationTotal" v-on:reloadTable="reloadTable"
-							:key="tableKey" />
+						<VisualNovelTable v-bind:showForm="showForm" v-bind:pagination="pagination" v-bind:query="searchQuery"
+							v-on:showSnackbarStatus="showSnackbarStatus" v-on:updatePaginationTotal="updatePaginationTotal"
+							v-on:reloadTable="reloadTable" :key="tableKey" />
 
 						<template #fallback>
 							<tr>

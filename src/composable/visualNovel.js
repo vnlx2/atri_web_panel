@@ -1,11 +1,11 @@
 import axios from "axios";
 
-export const getList = async (cookies, page = 1) => {
+export const getList = async (cookies, page = 1, keyword="") => {
   try {
     const response = await axios.get(
       `${
         import.meta.env.VITE_API_ADDRESS
-      }/api/v1/visualnovel/list?page=${(page == 'undefined' ? 1 : page)}`,
+      }/api/v1/visualnovel/list?page=${(page == 'undefined' ? 1 : page)}&keyword=${keyword}`,
       {
         headers: {
           "Content-Type": "application/json",

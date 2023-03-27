@@ -6,10 +6,10 @@ import { $vfm } from 'vue-final-modal';
 import { ref } from 'vue';
 import swal from 'sweetalert2'
 
-const props = defineProps(['showForm', 'pagination']);
+const props = defineProps(['showForm', 'pagination', 'query']);
 const emit = defineEmits(['updatePaginationTotal', 'showSnackbarStatus', 'reloadTable']);
 const cookies = useCookies().cookies;
-const vnListResponse = await getList(cookies, props.pagination.page);
+const vnListResponse = await getList(cookies, props.pagination.page, props.query);
 const vnLists = ref(vnListResponse.list);
 emit('updatePaginationTotal', vnListResponse.total);
 
