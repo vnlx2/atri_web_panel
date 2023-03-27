@@ -83,18 +83,25 @@ function showSnackbarStatus(response) {
 <template>
 	<HeaderName>Visual Novel's List</HeaderName>
 	<div class="mt-10 p-5">
-		<button @click="add" type="button"
-			class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-			<svg class="mr-2 -ml-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-				xmlns="http://www.w3.org/2000/svg">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6">
-				</path>
-			</svg>
-			Add Record
-		</button>
-		<div class="pt-6">
-			<v-text-field class="max-w-md grid-cols-none" density="compact" variant="solo" label="Search..."
-				append-inner-icon="mdi-magnify" single-line hide-details v-model="searchQuery" @click:append-inner=""></v-text-field>
+
+		<div class="pt-6 flex justify-between">
+			<div class="basis-3/4">
+				<button @click="add" type="button"
+					class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+					<svg class="mr-2 -ml-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+						xmlns="http://www.w3.org/2000/svg">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+							d="M12 6v6m0 0v6m0-6h6m-6 0H6">
+						</path>
+					</svg>
+					Add Record
+				</button>
+			</div>
+			<div class="basis-1/4">
+				<v-text-field class="" style="display: block;" density="compact" variant="solo" label="Search..."
+					append-inner-icon="mdi-magnify" single-line hide-details v-model="searchQuery"
+					@click:append-inner=""></v-text-field>
+			</div>
 		</div>
 		<div class="pt-6">
 			<v-table theme="light">
@@ -107,9 +114,10 @@ function showSnackbarStatus(response) {
 				</thead>
 				<tbody>
 					<suspense>
-						<VisualNovelTable v-bind:showForm="showForm" v-bind:pagination="pagination" v-bind:query="searchQuery"
-							v-on:showSnackbarStatus="showSnackbarStatus" v-on:updatePaginationTotal="updatePaginationTotal"
-							v-on:reloadTable="reloadTable" :key="tableKey" />
+						<VisualNovelTable v-bind:showForm="showForm" v-bind:pagination="pagination"
+							v-bind:query="searchQuery" v-on:showSnackbarStatus="showSnackbarStatus"
+							v-on:updatePaginationTotal="updatePaginationTotal" v-on:reloadTable="reloadTable"
+							:key="tableKey" />
 
 						<template #fallback>
 							<tr>
@@ -129,5 +137,4 @@ function showSnackbarStatus(response) {
 		<v-snackbar v-model="snackbarStatus.state" :timeout="2000" color="blue-grey" rounded="pill">
 			{{ snackbarStatus.message }}
 		</v-snackbar>
-	</div>
-</template>
+</div></template>
