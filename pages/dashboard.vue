@@ -6,10 +6,8 @@ useHead({
 definePageMeta({
     layout: 'admin-layout',
 });
-
-setPageTitle('Dashboard');
 </script>
 
 <template>
-    <p>Dummy</p>
+    <p>Dashboard</p>
 </template>

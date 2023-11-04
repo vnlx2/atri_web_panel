@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.active-menu, .active-menu:hover {
+    color: white;
+    background-color: #435ebe;
+}
