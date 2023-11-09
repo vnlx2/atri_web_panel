@@ -4,5 +4,5 @@
 
 .active-menu, .active-menu:hover {
     color: white;
-    background-color: #435ebe;
+    background-color: #435ebe !important;
 }
