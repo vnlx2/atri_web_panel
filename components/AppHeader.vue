@@ -1,20 +1,37 @@
 <script setup lang="ts">
-import { profileMenuShown, setProfileMenuShown } from '~/composables/states';
-
+import { profileMenuShown, setProfileMenuShown, sidebarOpen } from '~/composables/states';
 
 const isProfileMenuShown = profileMenuShown();
+const isSidebarOpen = sidebarOpen();
+
+onMounted(() => {
+    window.addEventListener('resize', setSidebarShownForDesktop);
+    setSidebarShownForDesktop();
+});
+
+function setSidebarShownForDesktop() {
+    setSidebarOpen((window.innerWidth >= 1024));
+}
+
 
 function toggleProfileMenu() {
     setProfileMenuShown(!isProfileMenuShown.value);
 }
+
+function toggleSidebar() {
+    setSidebarOpen(!isSidebarOpen.value);
+}
 </script>
 
 <template>
-    <header class="absolute right-0 pr-10 py-3 text-black">
-        <div class="relative top-0 inline-block w-full">
-            <button :class="[isProfileMenuShown ? 'text-indigo-500' : '']" class="profile-picture flex right-0 h-full py-2 rounded transition-colors hover:text-indigo-600" @click="toggleProfileMenu">
+    <header class="flex justify-between items-center px-3 py-3 text-black z-0 lg:absolute lg:right-0 lg:pr-10 lg:px-0">
+        <button @click="toggleSidebar" class="block ml-3 lg:hidden">
+            <i class="ri-menu-line text-2xl"></i>
+        </button>
+        <div class="relative basis-[40%] text-right sm:basis-1/4 lg:basis-auto">
+            <button :class="[isProfileMenuShown ? 'text-indigo-500' : '']" class="profile-picture h-full py-2 rounded transition-colors hover:text-indigo-600" @click="toggleProfileMenu">
                 <div class="mx-3 flex">
-                    <div class="mr-2 text-left flex flex-col justify-center">
+                    <div class="hidden md:flex mr-2 text-left flex-col justify-center">
                         <p class="text-md font-medium">Moonchild</p>
                         <p class="text-sm">Super Admin</p>
                     </div>
@@ -26,7 +43,7 @@ function toggleProfileMenu() {
                     </div>
                 </div>
             </button>
-            <ul :class="[!isProfileMenuShown ? 'invisible opacity-0 -translate-y-10' : 'visible opacity-100 translate-y-0']" class="profile-menu absolute w-full p-3 bg-white shadow-sm text-gray-700 pt-1 rounded transition">
+            <ul :class="[!isProfileMenuShown ? 'invisible opacity-0 -translate-y-10' : 'visible opacity-100 translate-y-0']" class="profile-menu absolute w-full p-1 bg-white shadow-sm text-gray-700 pt-1 right-5 rounded transition">
                 <li class="block p-2">
                     <a href="#" class="flex">
                         <i class="ri-logout-box-line block"></i>
