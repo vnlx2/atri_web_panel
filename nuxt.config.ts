@@ -1,7 +1,4 @@
-import { config } from "dotenv"
-
 // https://nuxt.com/docs/api/configuration/nuxt-config
-config();
 export default defineNuxtConfig({
   devtools: { enabled: true },
 
@@ -14,6 +11,7 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
+    apiSecret: '',
     public: {
       apiBase: ''
     }

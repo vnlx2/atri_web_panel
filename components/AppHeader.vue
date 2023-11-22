@@ -13,13 +13,23 @@ function setSidebarShownForDesktop() {
     setSidebarOpen((window.innerWidth >= 1024));
 }
 
-
 function toggleProfileMenu() {
     setProfileMenuShown(!isProfileMenuShown.value);
 }
 
 function toggleSidebar() {
     setSidebarOpen(!isSidebarOpen.value);
+}
+
+async function logout() {
+    try {
+        await logout();
+        const token = useCookie('token');
+        token.value = null;
+        return navigateTo('/');
+    } catch (error) {
+        console.log(error);
+    }
 }
 </script>
 
@@ -45,7 +55,7 @@ function toggleSidebar() {
             </button>
             <ul :class="[!isProfileMenuShown ? 'invisible opacity-0 -translate-y-10' : 'visible opacity-100 translate-y-0']" class="profile-menu absolute w-full p-1 bg-white shadow-sm text-gray-700 pt-1 right-5 rounded transition">
                 <li class="block p-2">
-                    <a href="#" class="flex">
+                    <a @click="logout" href="" class="flex">
                         <i class="ri-logout-box-line block"></i>
                         <p>Logout</p>
                     </a>

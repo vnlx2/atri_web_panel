@@ -82,6 +82,7 @@ async function loginPress() {
       }
       const token = useCookie('token');
       token.value = result.data['accessToken'];
+      return navigateTo('/admin');
     } catch (error) {
       console.log(error);
     }
