@@ -10,7 +10,13 @@ definePageMeta({
 const username = ref();
 const password = ref();
 const isProcess = ref(false);
-const imageIndex = Math.floor(Math.random() * 3) + 1;
+const imageIndex = ref(0);
+const isLoginImageReady = ref(false);
+
+onMounted (() => {
+  imageIndex.value = Math.floor(Math.random() * 3) + 1;
+  isLoginImageReady.value = true;
+});
 
 const loginForm = {
   username: ref("").value,
@@ -205,6 +211,7 @@ async function loginPress() {
         </div>
       </div>
       <div
+        v-if="isLoginImageReady"
         :style="{backgroundImage: 'url(/assets/img/login/bg' + imageIndex + '.webp)'}"
         class="flex-1 bg-cover bg-center hidden xl:block rounded-r-xl"
       >
