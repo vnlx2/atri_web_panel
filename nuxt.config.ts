@@ -1,4 +1,7 @@
+import { config } from "dotenv"
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
+config();
 export default defineNuxtConfig({
   devtools: { enabled: true },
 
@@ -11,7 +14,9 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    apiEndpoint: process.env.API_ENDPOINT
+    public: {
+      apiBase: ''
+    }
   },
 
   modules: ["@nuxtjs/tailwindcss", "@nuxt/image"]

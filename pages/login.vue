@@ -1,7 +1,11 @@
 <script setup lang="ts">
 useHead({
   title: 'Login'
-})
+});
+
+definePageMeta({
+  middleware: ['auth']
+});
 
 const username = ref();
 const password = ref();
@@ -31,29 +35,57 @@ function reset() {
   errorMessage.password.message = "";
 }
 
-function validation() {
-  if (loginForm.username === "") {
+function setErrorMessage(field: string, message: string) {
+  if (field === "username") {
     errorMessage.username.status.value = true;
-    errorMessage.username.message = "Username must be filled!";
-    nextTick(() => {
-      username.value.focus();
-    });
-  } else if (loginForm.password === "") {
+    errorMessage.username.message = message;
+    nextTick(() => username.value.focus());
+  }
+  else if (field === "password") {
     errorMessage.password.status.value = true;
-    errorMessage.password.message = "Password must be filled!";
-    nextTick(() => {
-      password.value.focus();
-    });
-  } else {
-    return;
+    errorMessage.password.message = message;
+    nextTick(() => password.value.focus());
   }
   isProcess.value = false;
 }
 
-function login() {
+function validation() {
+  if (loginForm.username === "") {
+    setErrorMessage('username', 'Username must be filled!');
+  } else if (loginForm.password === "") {
+    setErrorMessage('password', 'Password must be filled!');
+  } else {
+    return true;
+  }
+  return false;
+}
+
+async function loginPress() {
   isProcess.value = true;
   reset();
-  validation();
+  if (validation()) {
+    try {
+      const result = await login(loginForm.username, loginForm.password);
+      if (!result.status) {
+        switch (result.errorCode) {
+          case "VALIDATION_ERROR":
+            setErrorMessage(result.errors[0].field, result.errors[0].message);
+            break;
+          case "USER_NOT_FOUND":
+            setErrorMessage('username', 'Username not found!');
+            break;
+          case "INVALID_PASSWORD":
+            setErrorMessage('password', 'Password Missmatch!');
+            break;
+        }
+        return;
+      }
+      const token = useCookie('token');
+      token.value = result.data['accessToken'];
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 </script>
 
@@ -81,7 +113,7 @@ function login() {
           </p>
         </div>
         <div>
-          <div class="relative mt-6 h-11 min-w-[200px]">
+          <div :class="[{'mb-10': errorMessage.username.status.value}, 'relative mt-6 h-11 min-w-[200px]']">
             <input
               ref="username"
               @keydown="reset"
@@ -106,12 +138,12 @@ function login() {
             </label>
             <span
               :class="{ hidden: !errorMessage.username.status.value }"
-              class="font-medium tracking-wide text-red-500 text-xs pb-20"
+              class="font-medium tracking-wide text-red-500 text-xs"
               id="error-username"
               >{{ errorMessage.username.message }}</span
             >
           </div>
-          <div class="relative mt-5 h-11 min-w-[200px]">
+          <div :class="['relative mt-5 h-11 min-w-[200px]']">
             <input
               ref="password"
               :class="[
@@ -137,7 +169,7 @@ function login() {
           </div>
           <span
             :class="{ hidden: !errorMessage.password.status.value }"
-            class="font-medium tracking-wide text-red-500 text-xs pb-20"
+            class="font-medium tracking-wide text-red-500 text-xs"
             id="error-username"
             >{{ errorMessage.password.message }}</span
           >
@@ -145,7 +177,7 @@ function login() {
             <button
               :disabled="isProcess"
               class="rounded-full bg-blue-600 disabled:bg-blue-300 text-white text-xl py-1 xl:py-2 w-full"
-              @click="login"
+              @click="loginPress"
             >
               <div class="flex items-center justify-center space-x-2" v-if="isProcess">
                 <svg
