@@ -11,7 +11,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        'main': '#F2F7FE'
+        'main': '#F2F7FE',
+        'link': '#435ebe'
       },
       screens: {
         '2xl': '1562px',
