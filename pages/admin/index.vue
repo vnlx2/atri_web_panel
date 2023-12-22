@@ -3,13 +3,14 @@ useHead({
     title: 'Dashboard',
 });
 
-const vndbTotal = ref(0);
-const dbVNTotal = ref(0);
-const dbVNWithUrlTotal = ref(0);
-
-onBeforeMount(async () => {
-    [vndbTotal.value, dbVNTotal.value, dbVNWithUrlTotal.value] = await getDashboardStats();
+const vnController = useVisualNovel();
+const { getVisualNovelsDashboard } = vnController;
+const { dashboard } = storeToRefs(vnController);
+await useLazyAsyncData('dashboardData', async () => await getVisualNovelsDashboard(), {
+    initialCache: false
 });
+// onBeforeMount(async () => {
+// });
 </script>
 
 <template>
@@ -18,15 +19,15 @@ onBeforeMount(async () => {
         <div class="grid grid-rows-3 gap-y-5 md:grid-cols-3 md:gap-x-5">
             <div class="border flex flex-col p-6 bg-white">
                 <span>Number of VN in VNDB</span>
-                <p class="text-3xl py-3 font-semibold">{{ vndbTotal }}</p>
+                <p class="text-3xl py-3 font-semibold">{{ dashboard.vndb }}</p>
             </div>
             <div class="border flex flex-col p-6 bg-white">
                 <span>Number of VN in Database</span>
-                <p class="text-3xl py-3 font-semibold">{{ dbVNTotal }}</p>
+                <p class="text-3xl py-3 font-semibold">{{ dashboard.all }}</p>
             </div>
             <div class="border flex flex-col p-6 bg-white">
                 <span>Number of VN in Database with URL</span>
-                <p class="text-3xl py-3 font-semibold">{{ dbVNWithUrlTotal }}</p>
+                <p class="text-3xl py-3 font-semibold">{{ dashboard.withDownloadUrl }}</p>
             </div>
         </div>
     </div>
