@@ -25,7 +25,7 @@ function closeProfileMenu() {
 </script>
 
 <template>
-  <div class="flex h-screen relative z-0">
+  <div class="flex relative z-0">
     <AppSidebar />
     <div
       :class="[
