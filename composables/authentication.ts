@@ -38,13 +38,10 @@ export async function logout() {
 
 export const isAuthenticated = async (token: string) => {
   if (token === '') return false;
-  const runtimeConfig = useRuntimeConfig();
-  const key = new TextEncoder().encode(runtimeConfig.apiSecret);
   try {
-    const result = await jwtVerify(token, key);
-    if (!result) return false;
-    return true;
-  } catch (err) {
+    const result = await $fetch('/api/isAuthenticated');
+    return result.isAuthenticated;
+  } catch (error) {
     return false;
   }
 }

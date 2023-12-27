@@ -1,19 +1,4 @@
-interface IVisualNovelUrl {
-  provider: string;
-  type: string;
-  platform: string;
-  url: string;
-}
-
-export interface IVisualNovel {
-  code: string;
-  title: string;
-  aliases?: string;
-  length: number;
-  rating: number;
-  description: string;
-  image: string;
-}
+import type { IVisualNovel, IVisualNovels } from "./visualnovel";
 
 export interface IDashboard {
   vndb: number;
@@ -24,5 +9,15 @@ export interface IDashboard {
 export interface ISuccessResponse {
   success: boolean;
   message: string;
-  data?: IVisualNovel | IVisualNovel[] | IDashboard;
+  data?: IVisualNovels[] | IVisualNovel | IDashboard;
+}
+
+export interface IValidationError {
+  field: string;
+  message: string;
+}
+
+export interface IErrorResponse {
+  errorCode: string;
+  errors?: any
 }
