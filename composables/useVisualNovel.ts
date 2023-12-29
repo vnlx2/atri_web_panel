@@ -1,14 +1,6 @@
 import type { IDashboard, ISuccessResponse } from "~/types";
 import type * as VisualNovel from "~/types/visualnovel";
 
-
-const runtimeConfig = useRuntimeConfig();
-const headers = {
-  'Accept': 'application/json',
-  'Content-Type': 'application/json',
-  'Authorization': `Bearer ${useCookie('token').value}`
-}
-
 const languageDict: Record<string, string> = {
   'jp_link': 'jp',
   'en_link': 'en',
@@ -29,6 +21,16 @@ export const useVisualNovel = defineStore('visualNovel', {
     
   },
   actions: {
+    getBaseUrl() {
+      return useRuntimeConfig().public.apiBase;
+    },
+    getHeaders() {
+      return {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${useCookie('token').value}`
+      }
+    },
     resetVisualNovelForm() {
       this.visualNovelForm = {
         code: '',
@@ -78,10 +80,10 @@ export const useVisualNovel = defineStore('visualNovel', {
     },
     async getVisualNovelsDashboard() {
       try {
-        const { data } = await useFetch<ISuccessResponse>(`${runtimeConfig.public.apiBase}/v1/visualnovels/dashboard`,
+        const { data } = await useFetch<ISuccessResponse>(`${this.getBaseUrl()}/v1/visualnovels/dashboard`,
           {
             method: 'GET',
-            headers: headers
+            headers: this.getHeaders(),
           }
         );
         this.dashboard = (data.value) ? data.value.data as IDashboard : {
@@ -96,7 +98,7 @@ export const useVisualNovel = defineStore('visualNovel', {
     },
     async getVisualNovels(page: number) {
       try {
-        const { data } = await useFetch<VisualNovel.IVisualNovels[]>(`${runtimeConfig.public.apiBase}/v1/visualnovels?page=${page}`)
+        const { data } = await useFetch<VisualNovel.IVisualNovels[]>(`${this.getBaseUrl()}/v1/visualnovels?page=${page}`)
         this.visualNovels = data.value ?? [];
         return this.visualNovels;
       } catch (error) {
@@ -105,7 +107,10 @@ export const useVisualNovel = defineStore('visualNovel', {
     },
     async getVisualNovel(id: number) {
       try {
-        const { data } = await useFetch<VisualNovel.IVisualNovel>(`${runtimeConfig.public.apiBase}/v1/visualnovel/${id}`)
+        const { data } = await useFetch<VisualNovel.IVisualNovel>(`${this.getBaseUrl()}/v1/visualnovel/${id}`, {
+          method: 'GET',
+          headers: this.getHeaders(),
+        })
         return data.value;
       } catch (error) {
         console.log(error)
@@ -118,9 +123,9 @@ export const useVisualNovel = defineStore('visualNovel', {
           ...form,
           downloadUrl: this.transformToApiDownloadUrls(downloadUrl),
         };
-        const response = await useFetch<VisualNovel.IVisualNovel>(`${runtimeConfig.public.apiBase}/v1/visualnovel/store`, {
+        const response = await useFetch<VisualNovel.IVisualNovel>(`${this.getBaseUrl()}/v1/visualnovel/store`, {
           method: 'POST',
-          headers: headers,
+          headers: this.getHeaders(),
           body: body
         });
         return response;
@@ -135,8 +140,9 @@ export const useVisualNovel = defineStore('visualNovel', {
           ...form,
           downloadUrl: this.transformToApiDownloadUrls(downloadUrl),
         };
-        await useFetch<VisualNovel.IVisualNovel>(`${runtimeConfig.public.apiBase}/v1/visualnovel/update`, {
+        await useFetch<VisualNovel.IVisualNovel>(`${this.getBaseUrl()}/v1/visualnovel/update`, {
           method: 'PUT',
+          headers: this.getHeaders(),
           body: body
         })
       } catch (error) {
@@ -145,8 +151,9 @@ export const useVisualNovel = defineStore('visualNovel', {
     },
     async deleteVisualNovel(code: string) {
       try {
-        await useFetch(`${runtimeConfig.public.apiBase}/v1/visualnovel/delete/${code}`, {
-          method: 'DELETE'
+        await useFetch(`${this.getBaseUrl()}/v1/visualnovel/delete/${code}`, {
+          method: 'DELETE',
+          headers: this.getHeaders(),
         })
       } catch (error) {
         console.log(error)
