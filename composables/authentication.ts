@@ -1,5 +1,3 @@
-import { jwtVerify } from "jose";
-
 export async function login(username: string, password: string) {
   try {
     const runtimeConfig = useRuntimeConfig();
@@ -39,8 +37,8 @@ export async function logout() {
 export const isAuthenticated = async (token: string) => {
   if (token === '') return false;
   try {
-    const result = await $fetch('/api/isAuthenticated');
-    return result.isAuthenticated;
+    const { data } = await useFetch('/api/isAuthenticated');
+    return data.value?.isAuthenticated ?? false;
   } catch (error) {
     return false;
   }

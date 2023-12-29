@@ -2,7 +2,13 @@ import { isAuthenticated } from "~/composables/authentication";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const token = useCookie('token');
-  const authentication = await isAuthenticated(token.value ?? '');
+  let authentication: boolean;
+  if (token.value === undefined) {
+    authentication = false;
+  }
+  else {
+    authentication = await isAuthenticated(token.value ?? '');
+  }
   if (authentication && ['/', '/login'].includes(to.path)) {
     return navigateTo('/admin');
   }
