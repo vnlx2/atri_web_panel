@@ -87,6 +87,7 @@ async function loadTable(page=1) {
               <td class="py-2 pl-5">{{ visualNovel.title }}</td>
               <td class="py-2 pl-5">
                 <button
+                  @click="navigateTo(`/admin/visualnovel/${visualNovel.code}`)"
                   class="bg-blue-500 hover:bg-blue-400 focus:ring-3 focus:ring-blue-200 transition-colors text-white font-medium rounded-md shadow-sm px-2.5 mx-1 py-1"
                 >
                   <i class="ri-eye-line"></i>

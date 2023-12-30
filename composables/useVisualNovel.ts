@@ -1,4 +1,4 @@
-import type { IDashboard, ISuccessListsResponse, ISuccessResponse } from "~/types";
+import type { IDashboard, IErrorResponse, ISuccessListsResponse, ISuccessResponse } from "~/types";
 import type * as VisualNovel from "~/types/visualnovel";
 
 const languageDict: Record<string, string> = {
@@ -47,12 +47,12 @@ export const useVisualNovel = defineStore('visualNovel', {
       this.visualNovelForm = {
         code: apiData.code,
         title: apiData.title,
-        aliases: apiData.aliases,
+        aliases: apiData.aliases ?? '',
         length: apiData.length,
         rating: apiData.rating,
         description: apiData.description,
         image: apiData.image,
-        downloadUrl: this.transformApiDownloadUrls(apiData.downloadUrl),
+        downloadUrl: (apiData.downloadUrl !== undefined) ? this.transformApiDownloadUrls(apiData.downloadUrl) : [],
       }
     },
     transformApiDownloadUrls(apiDownloadUrls: VisualNovel.IVisualNovelUrlCategorical) {
@@ -103,7 +103,6 @@ export const useVisualNovel = defineStore('visualNovel', {
           method: 'GET',
           headers: this.getHeaders(),
         });
-        console.log(data?.value?.data?.list);
         this.visualNovels = data?.value?.data?.list ?? [];
         return true;
       } catch (error) {
@@ -112,11 +111,17 @@ export const useVisualNovel = defineStore('visualNovel', {
     },
     async getVisualNovel(id: number) {
       try {
-        const { data } = await useFetch<VisualNovel.IVisualNovel>(`${this.getBaseUrl()}/v1/visualnovel/${id}`, {
-          method: 'GET',
-          headers: this.getHeaders(),
-        })
-        return data.value;
+        const { data, error, status } = await useFetch<ISuccessResponse & VisualNovel.IVisualNovel, IErrorResponse>(
+          `${this.getBaseUrl()}/v1/visualnovel/${id}`, {
+            method: 'GET',
+            headers: this.getHeaders(),
+          }
+        );
+        if (status.value === "error") {
+          throw error;
+        }
+        this.resetVisualNovelForm();
+        this.setApiData(data.value?.data);
       } catch (error) {
         console.log(error)
       }
