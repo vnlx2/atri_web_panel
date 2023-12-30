@@ -1,4 +1,4 @@
-import type { IDashboard, ISuccessResponse } from "~/types";
+import type { IDashboard, ISuccessListsResponse, ISuccessResponse } from "~/types";
 import type * as VisualNovel from "~/types/visualnovel";
 
 const languageDict: Record<string, string> = {
@@ -98,11 +98,16 @@ export const useVisualNovel = defineStore('visualNovel', {
     },
     async getVisualNovels(page: number) {
       try {
-        const { data } = await useFetch<VisualNovel.IVisualNovels[]>(`${this.getBaseUrl()}/v1/visualnovels?page=${page}`)
-        this.visualNovels = data.value ?? [];
-        return this.visualNovels;
+        this.visualNovels = []; // reset visual novels list to empty list
+        const { data } = await useFetch<ISuccessResponse & ISuccessListsResponse>(`${this.getBaseUrl()}/v1/visualnovels?page=${page}`, {
+          method: 'GET',
+          headers: this.getHeaders(),
+        });
+        console.log(data?.value?.data?.list);
+        this.visualNovels = data?.value?.data?.list ?? [];
+        return true;
       } catch (error) {
-        console.log(error)
+        throw error;
       }
     },
     async getVisualNovel(id: number) {

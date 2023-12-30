@@ -3,8 +3,26 @@ const currentPage = ref(1);
 const itemsPerPage = ref(10);
 const isLoading = ref(false);
 
-function changePage(pageNumber: number) {
+async function changePage(pageNumber: number) {
   currentPage.value = pageNumber;
+  await loadTable(currentPage.value);
+}
+
+const vnController = useVisualNovel();
+const { visualNovels } = storeToRefs(vnController);
+
+await useLazyAsyncData('loadVNLists', async() => await loadTable());
+
+async function loadTable(page=1) {
+  try {
+    isLoading.value = true;
+    const res = await vnController.getVisualNovels(page);
+    if (res) {
+      isLoading.value = false;
+    }
+  } catch (error) {
+    console.error(error);
+  }
 }
 </script>
 
@@ -64,30 +82,9 @@ function changePage(pageNumber: number) {
             </tr>
           </thead>
           <tbody>
-            <tr class="border-y border-gray-300">
-              <td class="py-2 pl-5">9</td>
-              <td class="py-2 pl-5">Tomoyo After ~It's a Wonderful Life~</td>
-              <td class="py-2 pl-5">
-                <button
-                  class="bg-blue-500 hover:bg-blue-400 focus:ring-3 focus:ring-blue-200 transition-colors text-white font-medium rounded-md shadow-sm px-2.5 mx-1 py-1"
-                >
-                  <i class="ri-eye-line"></i>
-                </button>
-                <button
-                  class="bg-yellow-500 hover:bg-yellow-400 focus:ring-3 focus:ring-yellow-200 transition-colors text-white font-medium rounded-md shadow-sm px-2.5 mx-1 py-1"
-                >
-                  <i class="ri-pencil-line"></i>
-                </button>
-                <button
-                  class="bg-red-500 hover:bg-red-400 focus:ring-3 focus:ring-red-200 transition-colors text-white font-medium rounded-md shadow-sm px-2.5 mx-1 py-1"
-                >
-                  <i class="ri-delete-bin-line"></i>
-                </button>
-              </td>
-            </tr>
-            <tr class="border-y border-gray-300">
-              <td class="py-2 pl-5">9</td>
-              <td class="py-2 pl-5">Tomoyo After ~It's a Wonderful Life~</td>
+            <tr v-for="visualNovel in visualNovels" class="border-y border-gray-300">
+              <td class="py-2 pl-5">{{ visualNovel.code }}</td>
+              <td class="py-2 pl-5">{{ visualNovel.title }}</td>
               <td class="py-2 pl-5">
                 <button
                   class="bg-blue-500 hover:bg-blue-400 focus:ring-3 focus:ring-blue-200 transition-colors text-white font-medium rounded-md shadow-sm px-2.5 mx-1 py-1"

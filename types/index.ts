@@ -6,10 +6,16 @@ export interface IDashboard {
   withDownloadUrl: number;
 }
 
+export interface ISuccessListsResponse {
+  list: IVisualNovels[];
+  page: number;
+  total: number;
+}
+
 export interface ISuccessResponse {
   success: boolean;
   message: string;
-  data?: IVisualNovels[] | IVisualNovel | IDashboard;
+  data?: any;
 }
 
 export interface IValidationError {
