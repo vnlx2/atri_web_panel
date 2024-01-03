@@ -1,4 +1,8 @@
 <script setup lang="ts">
+useHead({
+  title: "Visual Novel"
+});
+
 const currentPage = ref(1);
 const itemsPerPage = ref(10);
 const isLoading = ref(false);
