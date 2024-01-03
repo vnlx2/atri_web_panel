@@ -6,21 +6,29 @@ useHead({
 const currentPage = ref(1);
 const itemsPerPage = ref(10);
 const isLoading = ref(false);
+const search = ref('');
+const hasDownloadUrl = ref(false);
 
 async function changePage(pageNumber: number) {
   currentPage.value = pageNumber;
-  await loadTable(currentPage.value);
+  await loadTable();
 }
+
+watch(search, () => loadTable());
 
 const vnController = useVisualNovel();
 const { visualNovels } = storeToRefs(vnController);
 
 await useLazyAsyncData('loadVNLists', async() => await loadTable());
 
-async function loadTable(page=1) {
+async function loadTable() {
   try {
     isLoading.value = true;
-    const res = await vnController.getVisualNovels(page);
+    const res = await vnController.getVisualNovels({
+      page: currentPage.value,
+      keyword: search.value,
+      hasDownloadUrl: hasDownloadUrl.value
+    });
     if (res) {
       isLoading.value = false;
     }
@@ -47,6 +55,7 @@ async function loadTable(page=1) {
             <i class="ri-search-2-line"></i>
           </div>
           <input
+            v-model="search"
             type="text"
             class="border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 pl-10"
             placeholder="Search"

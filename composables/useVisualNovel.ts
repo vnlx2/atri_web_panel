@@ -1,6 +1,12 @@
 import type { IDashboard, IErrorResponse, ISuccessListsResponse, ISuccessResponse } from "~/types";
 import type * as VisualNovel from "~/types/visualnovel";
 
+interface IVisualNovelFilter {
+  page: number;
+  keyword: string;
+  hasDownloadUrl: boolean;
+}
+
 const languageDict: Record<string, string> = {
   'jp_link': 'jp',
   'en_link': 'en',
@@ -96,13 +102,15 @@ export const useVisualNovel = defineStore('visualNovel', {
         throw error;
       }
     },
-    async getVisualNovels(page: number) {
+    async getVisualNovels(filter: IVisualNovelFilter) {
       try {
         this.visualNovels = []; // reset visual novels list to empty list
-        const { data } = await useFetch<ISuccessResponse & ISuccessListsResponse>(`${this.getBaseUrl()}/v1/visualnovels?page=${page}`, {
-          method: 'GET',
-          headers: this.getHeaders(),
-        });
+        const { data } = await useFetch<ISuccessResponse & ISuccessListsResponse>(`
+          ${this.getBaseUrl()}/v1/visualnovels?page=${filter.page}&keyword=${filter.keyword}&hasDownladUrl=${filter.hasDownloadUrl}`, {
+            method: 'GET',
+            headers: this.getHeaders(),
+          }
+        );
         this.visualNovels = data?.value?.data?.list ?? [];
         return true;
       } catch (error) {
