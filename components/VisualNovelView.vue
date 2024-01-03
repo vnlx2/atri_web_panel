@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { type IErrorResponse } from "~/types";
+
 const route = useRoute();
 const vnController = useVisualNovel();
 const { visualNovelForm } = storeToRefs(vnController);
@@ -9,9 +11,7 @@ const language: Record<string, string> = {
   id: "Indonesia",
 };
 
-// vnController.resetVisualNovelForm();
 vnImageKey.value = parseInt(route.params.code as string);
-await vnController.getVisualNovel(parseInt(route.params.code as string));
 
 useHead({
   title: visualNovelForm.value.title,
@@ -42,12 +42,12 @@ function setAltImage(e: any) {
       <div class="w-1/3 pr-5">
         <!-- Image -->
         <div class="max-w-xs mx-auto">
-          <NuxtImg
+          <img
             :key="vnImageKey"
-            class="mx-auto max-w-3xl"
-            preload
-            sizes="20vw"
-            :src="visualNovelForm.image"
+            class="mx-auto max-w-lg"
+            :src="
+              visualNovelForm.image !== undefined ? visualNovelForm.image : ''
+            "
             @error="setAltImage"
           />
         </div>
@@ -168,5 +168,14 @@ function setAltImage(e: any) {
         </tr>
       </tbody>
     </table>
+  </div>
+  <div class="my-5 flex flex-row space-x-5">
+    <button
+      type="button"
+      @click="navigateTo('/admin/visualnovel')"
+      class="bg-blue-600 hover:bg-blue-400 focus:ring-4 focus:ring-blue-300 transition-colors text-white font-medium p-2 rounded-md shadow-sm mt-5 px-3"
+    >
+      <p>Back</p>
+    </button>
   </div>
 </template>

@@ -1,14 +1,41 @@
 <script setup lang="ts">
+import type { IErrorResponse } from '~/types';
+
 useHead({
   title: 'Loading...',
+});
+
+definePageMeta({
+  validate: async(route) => {
+    return /^\d+$/.test(route.params.code as string);
+  }
+});
+
+const route = useRoute();
+const vnController = useVisualNovel();
+
+const checkErrorInterface = (value: IErrorResponse): value is IErrorResponse => !!value?.statusCode;
+
+await useAsyncData('loadVNDetail', async() => {
+  try {
+    await vnController.getVisualNovel(parseInt(route.params.code as string));
+  } catch (error: IErrorResponse | any) {
+    if (checkErrorInterface(error)) {
+      showError({
+        statusCode: error.statusCode,
+        message: error.message
+      });
+    }
+    else {
+      showError({statusCode: 500});
+    }
+  }
 });
 </script>
 
 <template>
   <Suspense>
-    <template #default>
-      <VisualNovelView />
-    </template>
+    <VisualNovelView />
     <template #fallback>
       <div>
         <span class="text-sm">
@@ -134,15 +161,15 @@ useHead({
           </table>
         </div>
       </div>
+      <div class="my-5 flex flex-row space-x-5">
+        <button
+          type="button"
+          @click="navigateTo('/admin/visualnovel')"
+          class="bg-blue-600 hover:bg-blue-400 focus:ring-4 focus:ring-blue-300 transition-colors text-white font-medium p-2 rounded-md shadow-sm mt-5 px-3"
+        >
+          <p>Back</p>
+        </button>
+      </div>
     </template>
   </Suspense>
-  <div class="my-5 flex flex-row space-x-5">
-    <button
-      type="button"
-      @click="navigateTo('/admin/visualnovel')"
-      class="bg-blue-600 hover:bg-blue-400 focus:ring-4 focus:ring-blue-300 transition-colors text-white font-medium p-2 rounded-md shadow-sm mt-5 px-3"
-    >
-      <p>Back</p>
-    </button>
-  </div>
 </template>

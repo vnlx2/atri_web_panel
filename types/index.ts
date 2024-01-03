@@ -24,6 +24,9 @@ export interface IValidationError {
 }
 
 export interface IErrorResponse {
+  success: boolean;
+  statusCode: number;
   errorCode: string;
+  message: string;
   errors?: any
 }

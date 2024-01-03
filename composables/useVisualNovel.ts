@@ -111,19 +111,24 @@ export const useVisualNovel = defineStore('visualNovel', {
     },
     async getVisualNovel(id: number) {
       try {
-        const { data, error, status } = await useFetch<ISuccessResponse & VisualNovel.IVisualNovel, IErrorResponse>(
+        const { data, error, status } = await useFetch<ISuccessResponse & VisualNovel.IVisualNovel>(
           `${this.getBaseUrl()}/v1/visualnovel/${id}`, {
             method: 'GET',
             headers: this.getHeaders(),
           }
         );
         if (status.value === "error") {
-          throw error;
+          throw {
+            success: false,
+            statusCode: error.value?.statusCode,
+            errorCode: error.value?.data.errorCode,
+            message: error.value?.data.message,
+          } as IErrorResponse;
         }
         this.resetVisualNovelForm();
         this.setApiData(data.value?.data);
       } catch (error) {
-        console.log(error)
+        throw error;
       }
     },
     async createVisualNovel(data: VisualNovel.IVisualNovelForm) {
