@@ -11,7 +11,7 @@ function closeSidebar() {
 </script>
 
 <template>
-    <aside :class="{'translate-x-0': isSidebarOpen}" class="-translate-x-full transition duration-300 ease-in-out w-[90%] h-screen absolute lg:sticky z-10 md:w-[35%] lg:w-[30%] xl:w-[20%] 2xl:w-[15%] bg-white text-gray-700 p-6">
+    <aside :class="{'translate-x-0': isSidebarOpen}" class="-translate-x-full transition duration-300 ease-in-out w-[90%] h-screen absolute lg:sticky lg:top-0 z-10 md:w-[35%] lg:w-[30%] xl:w-[20%] 2xl:w-[15%] bg-white text-gray-700 p-6">
         <div class="flex justify-between items-center lg:block">
             <div>
                 <h2 class="text-xl font-bold subpixel-antialiased tracking-wider font-sans">ATRI Admin Panel</h2>
