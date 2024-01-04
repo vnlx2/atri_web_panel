@@ -119,22 +119,24 @@ export const useVisualNovel = defineStore('visualNovel', {
     },
     async getVisualNovel(id: number) {
       try {
-        const { data, error, status } = await useFetch<ISuccessResponse & VisualNovel.IVisualNovel>(
-          `${this.getBaseUrl()}/v1/visualnovel/${id}`, {
-            method: 'GET',
-            headers: this.getHeaders(),
+        if (this.visualNovelForm.code === '' || this.visualNovelForm.code !== id.toString()) {
+          const { data, error, status } = await useFetch<ISuccessResponse & VisualNovel.IVisualNovel>(
+            `${this.getBaseUrl()}/v1/visualnovel/${id}`, {
+              method: 'GET',
+              headers: this.getHeaders(),
+            }
+          );
+          if (status.value === "error") {
+            throw {
+              success: false,
+              statusCode: error.value?.statusCode,
+              errorCode: error.value?.data.errorCode,
+              message: error.value?.data.message,
+            } as IErrorResponse;
           }
-        );
-        if (status.value === "error") {
-          throw {
-            success: false,
-            statusCode: error.value?.statusCode,
-            errorCode: error.value?.data.errorCode,
-            message: error.value?.data.message,
-          } as IErrorResponse;
+          this.resetVisualNovelForm();
+          this.setApiData(data.value?.data);
         }
-        this.resetVisualNovelForm();
-        this.setApiData(data.value?.data);
       } catch (error) {
         throw error;
       }

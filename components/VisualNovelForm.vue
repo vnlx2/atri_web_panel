@@ -4,7 +4,6 @@ import type { IValidationError } from "~/types";
 // Data Props
 const vnController = useVisualNovel();
 const { visualNovelForm } = storeToRefs(vnController);
-vnController.resetVisualNovelForm();
 
 // Form Props
 const codeInput = ref();
@@ -14,7 +13,7 @@ const descriptionInput = ref();
 const ratingInput = ref();
 const imageInput = ref();
 
-nextTick(() => codeInput.value.focus());
+// nextTick(() => codeInput.value.focus());
 
 const formChanged = ref(false);
 watch(visualNovelForm, () => (formChanged.value = true));

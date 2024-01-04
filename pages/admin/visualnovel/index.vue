@@ -106,6 +106,7 @@ async function loadTable() {
                   <i class="ri-eye-line"></i>
                 </button>
                 <button
+                  @click="navigateTo(`/admin/visualnovel/edit?code=${visualNovel.code}`)"
                   class="bg-yellow-500 hover:bg-yellow-400 focus:ring-3 focus:ring-yellow-200 transition-colors text-white font-medium rounded-md shadow-sm px-2.5 mx-1 py-1"
                 >
                   <i class="ri-pencil-line"></i>
