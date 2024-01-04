@@ -4,7 +4,9 @@ import type { IValidationError } from "~/types";
 // Data Props
 const vnController = useVisualNovel();
 const { visualNovelForm } = storeToRefs(vnController);
-
+const props = defineProps({
+  isEdit: Boolean
+});
 // Form Props
 const codeInput = ref();
 const titleInput = ref();
@@ -13,7 +15,7 @@ const descriptionInput = ref();
 const ratingInput = ref();
 const imageInput = ref();
 
-// nextTick(() => codeInput.value.focus());
+nextTick(() => codeInput.value.focus());
 
 const formChanged = ref(false);
 watch(visualNovelForm, () => (formChanged.value = true));
@@ -179,14 +181,12 @@ function setErrorMessage(field: string, message: string) {
 
 async function save() {
   try {
-    const response = await vnController.createVisualNovel(
-      visualNovelForm.value
-    );
+    const response = (!props.isEdit) ? 
+      await vnController.createVisualNovel(visualNovelForm.value)
+      : await vnController.updateVisualNovel(visualNovelForm.value);
     if (!(response?.status.value === "success")) {
       const errors: IValidationError[] | any =
         response?.error.value?.data.errors;
-      console.log(response?.error.value?.data.errors);
-      console.log(typeof errors);
       for (const error of errors) {
         setErrorMessage(error.field, error.message);
       }
@@ -547,7 +547,7 @@ function cancel() {
       </div>
       <div class="my-5 flex flex-row space-x-5">
         <button type="submit" class="bg-green-600 hover:bg-green-400 focus:ring-4 focus:ring-green-300 disabled:opacity-30 transition-colors text-white font-medium p-2 rounded-md shadow-sm mt-5 px-5" :disabled="editedRow.isEdited.value">
-          <p>Save</p>
+          <p>{{ !props.isEdit ? 'Save' : 'Update' }}</p>
         </button>
         <button type="button" @click="cancel"
           class="bg-transparent hover:bg-slate-400 hover:text-white focus:ring-4 focus:ring-blue-300 transition-colors font-medium p-2 rounded-md shadow-sm mt-5 px-3"

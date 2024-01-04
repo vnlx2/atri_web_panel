@@ -146,7 +146,7 @@ export const useVisualNovel = defineStore('visualNovel', {
         const { downloadUrl, ...form } = data;
         const body: VisualNovel.IVisualNovel = {
           ...form,
-          downloadUrl: this.transformToApiDownloadUrls(downloadUrl),
+          downloadUrl: downloadUrl.length > 0 ? this.transformToApiDownloadUrls(downloadUrl) : undefined,
         };
         const response = await useFetch<VisualNovel.IVisualNovel>(`${this.getBaseUrl()}/v1/visualnovel/store`, {
           method: 'POST',
@@ -155,7 +155,7 @@ export const useVisualNovel = defineStore('visualNovel', {
         });
         return response;
       } catch (error) {
-        console.log(error)
+        throw error;
       }
     },
     async updateVisualNovel(data: VisualNovel.IVisualNovelForm) {
@@ -163,15 +163,16 @@ export const useVisualNovel = defineStore('visualNovel', {
         const { downloadUrl, ...form } = data;
         const body: VisualNovel.IVisualNovel = {
           ...form,
-          downloadUrl: this.transformToApiDownloadUrls(downloadUrl),
+          downloadUrl: downloadUrl.length > 0 ? this.transformToApiDownloadUrls(downloadUrl) : undefined,
         };
-        await useFetch<VisualNovel.IVisualNovel>(`${this.getBaseUrl()}/v1/visualnovel/update`, {
+        const response = await useFetch<VisualNovel.IVisualNovel>(`${this.getBaseUrl()}/v1/visualnovel/update`, {
           method: 'PUT',
           headers: this.getHeaders(),
           body: body
-        })
+        });
+        return response;
       } catch (error) {
-        console.log(error)
+        throw error;
       }
     },
     async deleteVisualNovel(code: string) {

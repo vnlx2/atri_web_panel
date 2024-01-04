@@ -20,15 +20,13 @@ await useAsyncData('loadVNDetail', async() => {
   try {
     await vnController.getVisualNovel(parseInt(route.query.code as string));
   } catch (error: IErrorResponse | any) {
-    if (checkErrorInterface(error)) {
-      showError({
-        statusCode: error.statusCode,
-        message: error.message
-      });
+    if (!checkErrorInterface(error)) {
+      return showError(error);
     }
-    else {
-      showError({statusCode: 500});
-    }
+    return showError({
+      statusCode: error.statusCode,
+      message: error.message
+    });
   }
 });
 </script>
@@ -41,5 +39,5 @@ await useAsyncData('loadVNDetail', async() => {
   <h1 class="font-sans font-medium text-3xl my-5 rounded-lg">
     Edit Visual Novel
   </h1>
-  <VisualNovelForm />
+  <VisualNovelForm is-edit />
 </template>

@@ -26,7 +26,7 @@ export interface IVisualNovel {
   rating: number;
   description: string;
   image: string;
-  downloadUrl: IVisualNovelUrlCategorical;
+  downloadUrl: IVisualNovelUrlCategorical | undefined;
 }
 
 export interface IVisualNovelForm extends Omit<IVisualNovel,'downloadUrl'> {
