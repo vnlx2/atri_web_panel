@@ -2,22 +2,33 @@
 useHead({
   title: "Visual Novel"
 });
+const vnController = useVisualNovel();
+const { visualNovels } = storeToRefs(vnController);
 
 const currentPage = ref(1);
 const itemsPerPage = ref(10);
 const isLoading = ref(false);
 const search = ref('');
 const hasDownloadUrl = ref(false);
+watch(search, () => loadTable());
 
 async function changePage(pageNumber: number) {
   currentPage.value = pageNumber;
   await loadTable();
 }
 
-watch(search, () => loadTable());
-
-const vnController = useVisualNovel();
-const { visualNovels } = storeToRefs(vnController);
+async function drop(code: string) {
+  if (confirm(`Are you sure want to delete this Visual Novel with code ${code}?`) === false) {
+    return;
+  }
+  try {
+    await vnController.deleteVisualNovel(code);
+    alert("Success");
+    loadTable();
+  } catch (error) {
+    alert("Error");
+  }
+}
 
 await useLazyAsyncData('loadVNLists', async() => await loadTable());
 
@@ -112,6 +123,7 @@ async function loadTable() {
                   <i class="ri-pencil-line"></i>
                 </button>
                 <button
+                  @click="drop(visualNovel.code)"
                   class="bg-red-500 hover:bg-red-400 focus:ring-3 focus:ring-red-200 transition-colors text-white font-medium rounded-md shadow-sm px-2.5 mx-1 py-1"
                 >
                   <i class="ri-delete-bin-line"></i>
