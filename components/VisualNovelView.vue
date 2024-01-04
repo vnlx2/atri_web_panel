@@ -44,7 +44,7 @@ function setAltImage(e: any) {
         <div class="max-w-xs mx-auto">
           <img
             :key="vnImageKey"
-            class="mx-auto max-w-lg"
+            class="mx-auto max-w-xs"
             :src="
               visualNovelForm.image !== undefined ? visualNovelForm.image : ''
             "
@@ -108,8 +108,7 @@ function setAltImage(e: any) {
           >
             Description
           </h6>
-          <p class="text-lg text-justify whitespace-pre-line">
-            {{ visualNovelForm.description }}
+          <p class="text-lg text-justify whitespace-pre-line" v-html="visualNovelForm.description">
           </p>
         </div>
       </div>
