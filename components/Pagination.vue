@@ -11,7 +11,6 @@
   const minimumNumber = computed(() => 
     (Math.ceil((props.currentPage ?? 1) / 5) * 5) - 5
   );
-  console.log(minimumNumber.value);
 
   function previous() {
     if (props.currentPage! > 1) {

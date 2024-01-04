@@ -106,7 +106,7 @@ export const useVisualNovel = defineStore('visualNovel', {
       try {
         this.visualNovels = []; // reset visual novels list to empty list
         const { data } = await useFetch<ISuccessResponse & ISuccessListsResponse>(`
-          ${this.getBaseUrl()}/v1/visualnovels?page=${filter.page}&keyword=${filter.keyword}&hasDownladUrl=${filter.hasDownloadUrl}`, {
+          ${this.getBaseUrl()}/v1/visualnovels?page=${filter.page}&keyword=${filter.keyword}&hasDownloadUrl=${filter.hasDownloadUrl}`, {
             method: 'GET',
             headers: this.getHeaders(),
           }
