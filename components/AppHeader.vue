@@ -28,7 +28,7 @@ async function logout() {
         token.value = null;
         return navigateTo('/');
     } catch (error) {
-        console.log(error);
+        generalErrorAlert(error);
     }
 }
 </script>

@@ -218,12 +218,7 @@ async function save() {
       });
     }
   } catch (error: IErrorResponse | any) {
-    Swal.fire({
-      title: "Error",
-      text: checkErrorInterface(error) ? 
-        error.message : "An error has occured. Please try again!",
-      icon: 'error'
-    });
+    generalErrorAlert(error);
   }
 }
 

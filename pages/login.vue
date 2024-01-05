@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import Swal from "sweetalert2";
+import { checkErrorInterface, type IErrorResponse } from "~/types";
+
 useHead({
   title: 'Login'
 });
@@ -89,8 +92,8 @@ async function loginPress() {
       const token = useCookie('token');
       token.value = result.data['accessToken'];
       return navigateTo('/admin');
-    } catch (error) {
-      console.log(error);
+    } catch (error: IErrorResponse | any) {
+      generalErrorAlert(error);
     }
   }
 }

@@ -40,13 +40,7 @@ async function drop(code: string) {
         });
         loadTable();
       } catch (error: IErrorResponse | any) {
-        Swal.fire({
-          title: "Error",
-          text: checkErrorInterface(error) ? 
-            error.message : "An error has occured. Please try again!",
-          icon: 'error',
-          animation: false,
-        });
+        generalErrorAlert(error);
       }
     }
   });
@@ -66,7 +60,7 @@ async function loadTable() {
       isLoading.value = false;
     }
   } catch (error) {
-    console.error(error);
+    generalErrorAlert(error);
   }
 }
 </script>
