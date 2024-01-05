@@ -1,3 +1,4 @@
+import type IUser from "./user";
 import type { IVisualNovel, IVisualNovels } from "./visualnovel";
 
 export interface IDashboard {

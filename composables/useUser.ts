@@ -1,3 +1,4 @@
+import type { ISuccessListsResponse, ISuccessResponse } from "~/types";
 import type IUser from "~/types/user";
 
 export const useUser = defineStore('user', {
@@ -17,9 +18,31 @@ export const useUser = defineStore('user', {
       .replace(/\b\w/g, (match) => match.toUpperCase()),
   },
   actions: {
+    getBaseUrl() {
+      return useRuntimeConfig().public.apiBase;
+    },
+    getHeaders() {
+      return {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${useCookie('token').value}`
+      }
+    },
     storeCurrentUser(name: string, role: string) {
       this.currentUser.name = name;
       this.currentUser.roleName = role;
+    },
+    async getUsers() {
+      try {
+        const { data } = await useFetch<ISuccessResponse>(`
+        ${this.getBaseUrl()}/v1/users`, {
+          method: 'GET',
+          headers: this.getHeaders(),
+        });
+        this.users = data?.value?.data;
+      } catch (error) {
+        throw error;
+      }
     }
   }
 })

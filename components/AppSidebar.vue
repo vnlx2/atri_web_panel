@@ -47,7 +47,7 @@ function closeSidebar() {
                 </NuxtLink>
             </li>
             <li>
-                <NuxtLink to="/admin/users" :class="'flex flex-row items-center space-x-5 text-md py-2 my-2 px-3 rounded-md h-11 transition-all hover:bg-gray-100'" :active-class="'active-menu'">
+                <NuxtLink to="/admin/user" :class="'flex flex-row items-center space-x-5 text-md py-2 my-2 px-3 rounded-md h-11 transition-all hover:bg-gray-100'" :active-class="'active-menu'">
                     <i class="ri-group-line text-lg"></i>
                     <p>Users</p>
                 </NuxtLink>
