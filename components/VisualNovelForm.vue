@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { IValidationError } from "~/types";
+import { checkErrorInterface, type IErrorResponse, type IValidationError } from "~/types";
+import Swal from 'sweetalert2';
 
 // Data Props
 const vnController = useVisualNovel();
@@ -7,6 +8,10 @@ const { visualNovelForm } = storeToRefs(vnController);
 const props = defineProps({
   isEdit: Boolean
 });
+
+if (!props.isEdit) {
+  vnController.resetVisualNovelForm();
+}
 // Form Props
 const codeInput = ref();
 const titleInput = ref();
@@ -15,7 +20,7 @@ const descriptionInput = ref();
 const ratingInput = ref();
 const imageInput = ref();
 
-nextTick(() => codeInput.value.focus());
+onMounted(() => nextTick(() => codeInput.value.focus()));
 
 const formChanged = ref(false);
 watch(visualNovelForm, () => (formChanged.value = true));
@@ -139,6 +144,15 @@ function cleanUrlForm() {
   editedRow.index.value = 0;
 }
 
+function clearError() {
+  errorMessage.code.status.value = false;
+  errorMessage.title.status.value = false;
+  errorMessage.aliases.status.value = false;
+  errorMessage.rating.status.value = false;
+  errorMessage.description.status.value = false;
+  errorMessage.image.status.value = false;
+}
+
 // Form Methods
 function onlyNumber(event: any) {
   if (!/\d/.test(event.key) && event.key !== ".") return event.preventDefault();
@@ -181,6 +195,7 @@ function setErrorMessage(field: string, message: string) {
 
 async function save() {
   try {
+    clearError();
     const response = (!props.isEdit) ? 
       await vnController.createVisualNovel(visualNovelForm.value)
       : await vnController.updateVisualNovel(visualNovelForm.value);
@@ -191,11 +206,24 @@ async function save() {
         setErrorMessage(error.field, error.message);
       }
     } else {
-      alert("Success");
-      navigateTo("/admin/visualnovel");
+      Swal.fire({
+        title: "Success",
+        text: "Data was saved.",
+        icon: 'success',
+        animation: false,
+        timer: 1500,
+        showConfirmButton: false
+      }).then(() => {
+        navigateTo("/admin/visualnovel");
+      });
     }
-  } catch (error) {
-    console.error(error);
+  } catch (error: IErrorResponse | any) {
+    Swal.fire({
+      title: "Error",
+      text: checkErrorInterface(error) ? 
+        error.message : "An error has occured. Please try again!",
+      icon: 'error'
+    });
   }
 }
 
@@ -376,6 +404,7 @@ function cancel() {
             <div class="w-full py-2">
               <div class="relative w-full min-w-[200px]">
                 <textarea
+                  ref="descriptionInput"
                   :class="[
                     errorMessage.description.status.value
                       ? 'focus:border-red-500'

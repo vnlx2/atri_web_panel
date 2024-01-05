@@ -182,7 +182,7 @@ export const useVisualNovel = defineStore('visualNovel', {
           headers: this.getHeaders(),
         })
       } catch (error) {
-        console.log(error)
+        throw error;
       }
     }
   }

@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import Swal from 'sweetalert2';
+import { checkErrorInterface, type IErrorResponse } from '~/types';
+
 useHead({
   title: "Visual Novel",
 });
@@ -18,20 +21,35 @@ async function changePage(pageNumber: number) {
 }
 
 async function drop(code: string) {
-  if (
-    confirm(
-      `Are you sure want to delete this Visual Novel with code ${code}?`
-    ) === false
-  ) {
-    return;
-  }
-  try {
-    await vnController.deleteVisualNovel(code);
-    alert("Success");
-    loadTable();
-  } catch (error) {
-    alert("Error");
-  }
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    animation: false,
+    showCancelButton: true,
+    reverseButtons: true,
+  }).then(async (res) => {
+    if (res.isConfirmed) {
+      try {
+        await vnController.deleteVisualNovel(code);
+        Swal.fire({
+          title: "Deleted!",
+          text: "Data has been deleted.",
+          icon: 'success',
+          animation: false,
+        });
+        loadTable();
+      } catch (error: IErrorResponse | any) {
+        Swal.fire({
+          title: "Error",
+          text: checkErrorInterface(error) ? 
+            error.message : "An error has occured. Please try again!",
+          icon: 'error',
+          animation: false,
+        });
+      }
+    }
+  });
 }
 
 await useLazyAsyncData("loadVNLists", async () => await loadTable());
@@ -39,7 +57,6 @@ await useLazyAsyncData("loadVNLists", async () => await loadTable());
 async function loadTable() {
   try {
     isLoading.value = true;
-    console.log(hasDownloadUrl.value);
     const res = await vnController.getVisualNovels({
       page: currentPage.value,
       keyword: search.value,

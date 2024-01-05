@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IErrorResponse } from '~/types';
+import { checkErrorInterface, type IErrorResponse } from '~/types';
 
 useHead({
   title: 'Loading...',
@@ -13,8 +13,6 @@ definePageMeta({
 
 const route = useRoute();
 const vnController = useVisualNovel();
-
-const checkErrorInterface = (value: IErrorResponse): value is IErrorResponse => !!value?.statusCode;
 
 await useAsyncData('loadVNDetail', async() => {
   try {
