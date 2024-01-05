@@ -8,10 +8,10 @@ export default defineEventHandler(async (event) => {
   try {
     const result = await jwtVerify(token, key);
     if (!result) {
-      return { isAuthenticated: false }
+      return { isAuthenticated: false, payloadData: null }; 
     };
-    return { isAuthenticated: true };
+    return { isAuthenticated: true, payloadData: result.payload };
   } catch (err) {
-    return { isAuthenticated: false };
+    return { isAuthenticated: false, payloadData: null };
   }
 });

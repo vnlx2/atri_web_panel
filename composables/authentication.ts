@@ -38,7 +38,18 @@ export const isAuthenticated = async (token: string) => {
   if (token === '') return false;
   try {
     const { data } = await useFetch('/api/isAuthenticated');
-    return data.value?.isAuthenticated ?? false;
+    if (data.value === null) {
+      return false;
+    }
+    if (data.value?.payloadData === null) {
+      return false;
+    }
+    const userController = useUser();
+    userController.storeCurrentUser(
+      data.value.payloadData.sub,
+      data.value.payloadData.role
+    );
+    return data.value.isAuthenticated;
   } catch (error) {
     return false;
   }

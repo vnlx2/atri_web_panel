@@ -3,6 +3,7 @@ import { profileMenuShown, setProfileMenuShown, sidebarOpen } from '~/composable
 
 const isProfileMenuShown = profileMenuShown();
 const isSidebarOpen = sidebarOpen();
+const userController = useUser();
 
 onMounted(() => {
     window.addEventListener('resize', setSidebarShownForDesktop);
@@ -41,9 +42,9 @@ async function logout() {
         <div class="relative basis-[40%] text-right sm:basis-1/4 lg:basis-auto">
             <button :class="[isProfileMenuShown ? 'text-indigo-500' : '']" class="profile-picture h-full py-2 rounded transition-colors hover:text-indigo-600" @click="toggleProfileMenu">
                 <div class="mx-3 flex">
-                    <div class="hidden md:flex mr-2 text-left flex-col justify-center">
-                        <p class="text-md font-medium">Moonchild</p>
-                        <p class="text-sm">Super Admin</p>
+                    <div class="hidden md:flex mr-3 text-left flex-col justify-center">
+                        <p class="text-md font-medium text-right">{{ userController.getCurrentName }}</p>
+                        <p class="text-sm">{{ userController.getCurrentRoleName }}</p>
                     </div>
                     <div class="flex items-center">
                         <NuxtImg src="/assets/profile.svg" width="40" />
