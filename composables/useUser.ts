@@ -1,4 +1,4 @@
-import type { ISuccessListsResponse, ISuccessResponse } from "~/types";
+import type { IErrorResponse, ISuccessListsResponse, ISuccessResponse } from "~/types";
 import type IUser from "~/types/user";
 
 export const useUser = defineStore('user', {
@@ -32,6 +32,14 @@ export const useUser = defineStore('user', {
       this.currentUser.name = name;
       this.currentUser.roleName = role;
     },
+    resetForm() {
+      this.user = {
+        id: '',
+        username: '',
+        password: '',
+        role: ''
+      }
+    },
     async getUsers() {
       try {
         const { data } = await useFetch<ISuccessResponse>(`
@@ -40,6 +48,24 @@ export const useUser = defineStore('user', {
           headers: this.getHeaders(),
         });
         this.users = data?.value?.data;
+      } catch (error) {
+        throw error;
+      }
+    },
+    async store(isUpdated: boolean = false) {
+      try {
+        const { data, error, status } = await useFetch<ISuccessResponse>(`${this.getBaseUrl()}/v1/user/${!isUpdated ? 'store' : 'update'}`, {
+          method: !isUpdated ? 'POST' : 'PUT',
+          headers: this.getHeaders(),
+          body: {
+            ...this.user,
+            role: 'admin'
+          }
+        });
+        if (status.value === 'error') {
+          throw error.value?.data as IErrorResponse;
+        }
+        return data;
       } catch (error) {
         throw error;
       }

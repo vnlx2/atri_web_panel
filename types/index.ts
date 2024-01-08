@@ -32,4 +32,4 @@ export interface IErrorResponse {
   errors?: any
 }
 
-export const checkErrorInterface = (value: IErrorResponse): value is IErrorResponse => !!value?.statusCode;
+export const checkErrorInterface = (value: IErrorResponse): value is IErrorResponse => !!value?.errorCode;
