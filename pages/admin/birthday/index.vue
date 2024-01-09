@@ -12,29 +12,29 @@ const currentPage = ref(1);
 const itemsPerPage = ref(10);
 
 async function drop(id: string) {
-  // Swal.fire({
-  //   title: 'Are you sure?',
-  //   text: "You won't be able to revert this user!",
-  //   icon: 'warning',
-  //   animation: false,
-  //   showCancelButton: true,
-  //   reverseButtons: true,
-  // }).then(async (res) => {
-  //   if (res.isConfirmed) {
-  //     try {
-  //       await userController.delete(id);
-  //       Swal.fire({
-  //         title: "Deleted!",
-  //         text: "User has been deleted.",
-  //         icon: 'success',
-  //         animation: false,
-  //       });
-  //       loadTable();
-  //     } catch (error: IErrorResponse | any) {
-  //       generalErrorAlert(error);
-  //     }
-  //   }
-  // });
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this user!",
+    icon: 'warning',
+    animation: false,
+    showCancelButton: true,
+    reverseButtons: true,
+  }).then(async (res) => {
+    if (res.isConfirmed) {
+      try {
+        await birthdayController.delete(id);
+        Swal.fire({
+          title: "Deleted!",
+          text: "Data has been deleted.",
+          icon: 'success',
+          animation: false,
+        });
+        loadTable();
+      } catch (error: IErrorResponse | any) {
+        generalErrorAlert(error);
+      }
+    }
+  });
 }
 
 await useLazyAsyncData("loadBirthdayLists", async () => await loadTable());
@@ -60,7 +60,7 @@ async function changePage(pageNumber: number) {
   <div class="bg-white rounded-lg shadow-md px-5">
     <div class="flex justify-between py-6">
       <button
-        @click="navigateTo('user/add')"
+        @click="navigateTo('birthday/add')"
         class="flex items-center bg-blue-600 hover:bg-blue-400 focus:ring-4 focus:ring-blue-300 transition-colors text-white font-medium px-3 py-2 rounded-md shadow-sm"
       >
         <i class="ri-add-line text-lg font-bold mr-2"></i>
@@ -110,7 +110,7 @@ async function changePage(pageNumber: number) {
             <td class="py-2 pl-5">
               <button
                 @click="
-                  navigateTo(`/admin/user/edit?code=${birthday.id}`)
+                  navigateTo(`/admin/birthday/edit?id=${birthday.id}`)
                 "
                 class="bg-yellow-500 hover:bg-yellow-400 focus:ring-3 focus:ring-yellow-200 transition-colors text-white font-medium rounded-md shadow-sm px-2.5 mx-1 py-1"
               >
