@@ -1,5 +1,5 @@
-import type IUser from "./user";
-import type { IVisualNovel, IVisualNovels } from "./visualnovel";
+import type { IBirthdays } from "./birthday";
+import type { IVisualNovels } from "./visualnovel";
 
 export interface IDashboard {
   vndb: number;
@@ -8,7 +8,7 @@ export interface IDashboard {
 }
 
 export interface ISuccessListsResponse {
-  list: IVisualNovels[];
+  list: IVisualNovels[] & IBirthdays[];
   page: number;
   total: number;
 }
