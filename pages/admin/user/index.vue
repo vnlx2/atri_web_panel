@@ -10,29 +10,29 @@ const { users } = storeToRefs(userController);
 const isLoading = ref(false);
 
 async function drop(id: string) {
-//   Swal.fire({
-//     title: 'Are you sure?',
-//     text: "You won't be able to revert this!",
-//     icon: 'warning',
-//     animation: false,
-//     showCancelButton: true,
-//     reverseButtons: true,
-//   }).then(async (res) => {
-//     if (res.isConfirmed) {
-//       try {
-//         await vnController.deleteuser(code);
-//         Swal.fire({
-//           title: "Deleted!",
-//           text: "Data has been deleted.",
-//           icon: 'success',
-//           animation: false,
-//         });
-//         loadTable();
-//       } catch (error: IErrorResponse | any) {
-//         generalErrorAlert(error);
-//       }
-//     }
-//   });
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this user!",
+    icon: 'warning',
+    animation: false,
+    showCancelButton: true,
+    reverseButtons: true,
+  }).then(async (res) => {
+    if (res.isConfirmed) {
+      try {
+        await userController.delete(id);
+        Swal.fire({
+          title: "Deleted!",
+          text: "User has been deleted.",
+          icon: 'success',
+          animation: false,
+        });
+        loadTable();
+      } catch (error: IErrorResponse | any) {
+        generalErrorAlert(error);
+      }
+    }
+  });
 }
 
 await useLazyAsyncData("loadUserLists", async () => await loadTable());

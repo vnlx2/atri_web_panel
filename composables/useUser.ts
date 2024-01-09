@@ -52,6 +52,20 @@ export const useUser = defineStore('user', {
         throw error;
       }
     },
+    async getUser(id: string) {
+      try {
+        const { data, error, status } = await useFetch<ISuccessResponse>(`${this.getBaseUrl()}/v1/user/${id}`, {
+          method: 'GET',
+          headers: this.getHeaders(),
+        });
+        if (status.value === 'error') {
+          throw error.value?.data as IErrorResponse;
+        }
+        this.user = data?.value?.data;
+      } catch (error) {
+        throw error;
+      }
+    },
     async store(isUpdated: boolean = false) {
       try {
         const { data, error, status } = await useFetch<ISuccessResponse>(`${this.getBaseUrl()}/v1/user/${!isUpdated ? 'store' : 'update'}`, {
@@ -69,6 +83,42 @@ export const useUser = defineStore('user', {
       } catch (error) {
         throw error;
       }
+    },
+    async update(id: string) {
+      try {
+        const body = {
+          id: this.user.id,
+          username: this.user.username,
+          oldPassword: this.user.oldPassword,
+          newPassword: this.user.password,
+          role: 'admin',
+        }
+        const { data, error, status } = await useFetch<ISuccessResponse>(`${this.getBaseUrl()}/v1/user/update/${id}`, {
+          method: 'PUT',
+          headers: this.getHeaders(),
+          body: body
+        });
+        if (status.value === 'error') {
+          throw error.value?.data as IErrorResponse;
+        }
+        return data;
+      } catch (error) {
+        throw error;
+      }
+    },
+    async delete(id: string) {
+      try {
+        const { data, error, status } = await useFetch<ISuccessResponse>(`${this.getBaseUrl()}/v1/user/delete/${id}`, {
+          method: 'DELETE',
+          headers: this.getHeaders(),
+        });
+        if (status.value === 'error') {
+          throw error.value?.data as IErrorResponse;
+        }
+        return data;
+      } catch (error) {
+        throw error;
+      }
     }
   }
-})
+});

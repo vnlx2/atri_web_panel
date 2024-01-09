@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type IErrorResponse, type IValidationError } from "~/types";
+import { type IErrorResponse } from "~/types";
 import Swal from "sweetalert2";
 
 // Data Props
@@ -9,16 +9,19 @@ const props = defineProps({
   isEdit: Boolean,
 });
 
-if (!props.isEdit) {
-  userController.resetForm();
-}
 // Form Props
 const usernameInput = ref();
 const passwordInput = ref();
 const confirmPasswordInput = ref();
+const oldPasswordInput = props.isEdit ? ref() : undefined;
 const confirmPassword = ref('');
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
+const showOldPassword = props.isEdit ? ref(false) : undefined;
+
+if (!props.isEdit) {
+  userController.resetForm();
+}
 
 onMounted(() => nextTick(() => usernameInput.value.focus()));
 
@@ -28,15 +31,19 @@ watch(user, () => (formChanged.value = true));
 const errorMessage = {
   username: {
     status: ref(false),
-    message: ref("Dummy Error").value,
+    message: ref("").value,
+  },
+  oldPassword: {
+    status: ref(false),
+    message: ref("").value,
   },
   password: {
     status: ref(false),
-    message: ref("Dummy Error").value,
+    message: ref("").value,
   },
   confirmPassword: {
     status: ref(false),
-    message: ref("Dummy Error").value,
+    message: ref("").value,
   },
 };
 
@@ -53,6 +60,12 @@ function setErrorMessage(field: string, message: string) {
       errorMessage.username.message = message;
       nextTick(() => usernameInput.value.focus());
       break;
+    case "oldPassword":
+      errorMessage.oldPassword.status.value = true;
+      errorMessage.oldPassword.message = message;
+      nextTick(() => oldPasswordInput?.value.focus());
+      break;
+    case "newPassword":
     case "password":
       errorMessage.password.status.value = true;
       errorMessage.password.message = message;
@@ -69,7 +82,7 @@ function setErrorMessage(field: string, message: string) {
 async function save() {
   try {
     clearError();
-    if (user.value.password !== confirmPassword.value) {
+    if ((user.value.password ?? '') !== confirmPassword.value) {
       return setErrorMessage('confirm', 'Confirm Passwords do not match!');
     }
     await userController.store(props.isEdit ?? false);
@@ -81,7 +94,7 @@ async function save() {
       timer: 1500,
       showConfirmButton: false,
     }).then(() => {
-      navigateTo("/admin/visualnovel");
+      navigateTo("/admin/user");
     });
   } catch (error: IErrorResponse | any) {
     if (error.errorCode !== 'VALIDATION_ERROR') {
@@ -106,6 +119,7 @@ function cancel() {
       }
     });
   }
+  navigateTo("/admin/user");
 }
 </script>
 
@@ -135,9 +149,39 @@ function cancel() {
             >{{ errorMessage.username.message }}</span
           >
         </div>
+        <!--Old Password-->
+        <div class="py-2" v-if="props.isEdit">
+          <label for="oldPasswordInput" class="px-1 text-ms text-gray-600">Old Password</label>
+          <div class="relative">
+            <input
+              :type="!showOldPassword ? 'password' : 'text'"
+              ref="oldPasswordInput"
+              @keydown=""
+              :class="[
+                errorMessage.oldPassword.status.value
+                  ? 'focus:border-red-500'
+                  : 'focus:border-blue-500',
+              ]"
+              class="w-full rounded-[7px] border border-b-gray-400 bg-transparent px-3 py-2.5 font-sans shadow-sm text-gray-700 transition-all placeholder-shown:border placeholder-shown:border-gray-200 focus:border-2 focus:outline-0 disabled:border-0 disabled:bg-gray-50"
+              v-model="user.oldPassword"
+            />
+            <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
+              <i v-show="!showOldPassword" class="ri-eye-line text-lg" @click="showOldPassword = !showOldPassword"></i>
+              <i v-show="showOldPassword" class="ri-eye-off-line text-lg" @click="showOldPassword = !showOldPassword"></i>
+            </div>
+          </div>
+          <span
+            :class="{ hidden: !errorMessage.oldPassword.status.value }"
+            class="font-medium tracking-wide text-red-500 text-xs"
+            id="error-old-password"
+            >{{ errorMessage.oldPassword.message }}</span
+          >
+        </div>
         <!-- Password -->
         <div class="py-2">
-          <label for="passwordInput" class="px-1 text-ms text-gray-600">Password</label>
+          <label for="passwordInput" class="px-1 text-ms text-gray-600">
+            {{ !props.isEdit ? 'Password' : 'New Password' }}
+          </label>
           <div class="relative">
             <input
               :type="!showPassword ? 'password' : 'text'"
@@ -150,7 +194,7 @@ function cancel() {
               ]"
               class="w-full rounded-[7px] border border-b-gray-400 bg-transparent px-3 py-2.5 font-sans shadow-sm text-gray-700 transition-all placeholder-shown:border placeholder-shown:border-gray-200 focus:border-2 focus:outline-0 disabled:border-0 disabled:bg-gray-50"
               v-model="user.password"
-              required
+              :required="!($props.isEdit ?? false) || (user.oldPassword !== undefined)"
             />
             <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
               <i v-show="!showPassword" class="ri-eye-line text-lg" @click="showPassword = !showPassword"></i>
@@ -179,7 +223,7 @@ function cancel() {
               ]"
               class="w-full rounded-[7px] border border-b-gray-400 bg-transparent px-3 py-2.5 font-sans shadow-sm text-gray-700 transition-all placeholder-shown:border placeholder-shown:border-gray-200 focus:border-2 focus:outline-0 disabled:border-0 disabled:bg-gray-50"
               v-model="confirmPassword"
-              required
+              :required="!($props.isEdit ?? false) || (user.oldPassword !== undefined)"
             />
             <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
               <i v-show="!showConfirmPassword" class="ri-eye-line text-lg" @click="showConfirmPassword = !showConfirmPassword"></i>
