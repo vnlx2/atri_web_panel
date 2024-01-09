@@ -52,7 +52,7 @@
           </a>
         </li>
         <li 
-          v-for="index in 5" 
+          v-for="index in (pageCount < 5 ? pageCount : 5)" 
           @click="$emit('changePage', index + minimumNumber)" 
           :class="['flex items-center justify-center px-3 h-8 leading-tight', currentPage === (index + minimumNumber) ? 'text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700' : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700']">{{ index + minimumNumber }}</li>
         <li>
