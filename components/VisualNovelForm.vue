@@ -4,7 +4,10 @@ import Swal from 'sweetalert2';
 
 // Data Props
 const vnController = useVisualNovel();
+const configController = useConfig();
 const { visualNovelForm } = storeToRefs(vnController);
+const { storageProviders } = storeToRefs(configController);
+
 const props = defineProps({
   isEdit: Boolean
 });
@@ -12,6 +15,9 @@ const props = defineProps({
 if (!props.isEdit) {
   vnController.resetVisualNovelForm();
 }
+
+onBeforeMount(async() => await configController.getStorageProviders());
+
 // Form Props
 const codeInput = ref();
 const titleInput = ref();
@@ -520,9 +526,7 @@ function cancel() {
                 <select
                   class="h-full w-full rounded-[7px] border border-gray-200 bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-gray-200 placeholder-shown:border-t-gray-200 empty:!bg-gray-900 focus:border-2 focus:border-blue-500 focus:outline-0 disabled:border-0 disabled:bg-gray-50" v-if="editedRow.index.value === index && editedRow.isEdited.value" v-model="vnUrlForm.provider"
                 >
-                  <option value="drive">Google Drive</option>
-                  <option value="onedrive">OneDrive</option>
-                  <option value="terabox">Terabox</option>
+                  <option v-for="provider in storageProviders" :value="provider.code.replace(/\b\w/g, (match) => match.toUpperCase())">{{ provider.name }}</option>
                 </select>
                 <p v-else>{{ vnDl.provider }}</p>
               </td>
