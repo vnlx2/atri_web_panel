@@ -7,13 +7,6 @@ export default defineNuxtConfig({
       enabled: true
     }
   },
-  nitro: {
-    prerender: {
-      ignore: [
-        '/admin/visualnovel/edit'
-      ]
-    }
-  },
 
   css: ['~/assets/css/main.css'],
   postcss: {
@@ -26,9 +19,10 @@ export default defineNuxtConfig({
   runtimeConfig: {
     apiSecret: '',
     public: {
-      apiBase: ''
+      apiBase: '',
+      port: 8000
     }
   },
 
-  modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt"]
+  modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt", "@nuxt/image"]
 })
