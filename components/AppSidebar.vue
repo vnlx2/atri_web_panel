@@ -1,8 +1,7 @@
 <script setup>
 import { sidebarOpen } from '~/composables/states';
 
-const route = useRoute();
-const currentPage = route.name;
+const userController = useUser();
 const isSidebarOpen = sidebarOpen();
 
 function closeSidebar() {
@@ -34,13 +33,13 @@ function closeSidebar() {
                     <p>Visual Novel</p>
                 </NuxtLink>
             </li>
-            <li>
+            <li v-if="userController.getCurrentRoleName === 'Super Admin'">
                 <NuxtLink to="/admin/fantl" :class="'flex flex-row items-center space-x-5 text-md py-2 my-2 px-3 rounded-md h-11 transition-all hover:bg-gray-100'" :active-class="'active-menu'">
                     <i class="ri-team-line text-lg"></i>
                     <p>Fan TL Team</p>
                 </NuxtLink>
             </li>
-            <li>
+            <li v-if="userController.getCurrentRoleName === 'Super Admin'">
                 <NuxtLink to="/admin/birthday" :class="'flex flex-row items-center space-x-5 text-md py-2 my-2 px-3 rounded-md h-11 transition-all hover:bg-gray-100'" :active-class="'active-menu'">
                     <i class="ri-cake-2-line text-lg"></i>
                     <p>Birthday</p>
