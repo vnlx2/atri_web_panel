@@ -23,5 +23,5 @@ export default defineNuxtConfig({
     }
   },
 
-  modules: ["@nuxtjs/tailwindcss", "@nuxt/image", "@pinia/nuxt"]
+  modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt"]
 })
