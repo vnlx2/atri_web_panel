@@ -7,6 +7,13 @@ export default defineNuxtConfig({
       enabled: true
     }
   },
+  nitro: {
+    prerender: {
+      ignore: [
+        '/admin/visualnovel/edit'
+      ]
+    }
+  },
 
   css: ['~/assets/css/main.css'],
   postcss: {
